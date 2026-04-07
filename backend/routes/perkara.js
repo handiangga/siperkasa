@@ -24,12 +24,13 @@ router.get(
   PerkaraController.getMyPerkara,
 );
 
-// detail
+// 🔥 DETAIL (FIX PARAM)
 router.get(
-  "/:perkara_id",
+  "/:id",
   authentication,
   authorizationPerkara,
   PerkaraController.getDetail,
 );
+router.patch("/status/:id", authentication, PerkaraController.updateStatus);
 
 module.exports = router;

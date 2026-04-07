@@ -64,6 +64,15 @@ export default function Layout() {
               Jaksa
             </button>
 
+            <button
+              onClick={() => navigate("/p16")}
+              className={`hover:text-yellow-300 ${
+                isActive("/p16") && "text-yellow-300 underline"
+              }`}
+            >
+              P16
+            </button>
+
             {/* 🔥 USER (ADMIN ONLY) */}
             {user?.role === "admin" && (
               <button

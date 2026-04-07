@@ -9,6 +9,7 @@ export default function SpdpCreate() {
   const [form, setForm] = useState({
     nomor_spdp: "",
     tanggal_spdp: "",
+    asal_instansi: "",
     nama_tersangka: "",
     pasal: "",
   });
@@ -22,7 +23,7 @@ export default function SpdpCreate() {
       [e.target.name]: e.target.value,
     });
 
-    // realtime validation clear
+    // clear error realtime
     setErrors({
       ...errors,
       [e.target.name]: "",
@@ -35,6 +36,7 @@ export default function SpdpCreate() {
 
     if (!form.nomor_spdp) err.nomor_spdp = "Nomor wajib diisi";
     if (!form.tanggal_spdp) err.tanggal_spdp = "Tanggal wajib diisi";
+    if (!form.asal_instansi) err.asal_instansi = "Asal instansi wajib diisi";
     if (!form.nama_tersangka) err.nama_tersangka = "Tersangka wajib diisi";
     if (!form.pasal) err.pasal = "Pasal wajib diisi";
 
@@ -66,8 +68,8 @@ export default function SpdpCreate() {
 
       navigate("/spdp");
     } catch (err) {
-      Swal.fire("Error", "Gagal menyimpan", "error");
       console.log(err);
+      Swal.fire("Error", "Gagal menyimpan SPDP", "error");
     }
   };
 
@@ -86,79 +88,91 @@ export default function SpdpCreate() {
           </button>
         </div>
 
-        {/* CARD FORM */}
+        {/* FORM */}
         <form
           onSubmit={handleSubmit}
-          className="bg-white p-6 rounded-2xl shadow-lg space-y-5 transition-all duration-300"
+          className="bg-white p-6 rounded-2xl shadow-lg space-y-5"
         >
           {/* NOMOR */}
-          <div className="flex flex-col">
-            <label className="text-sm text-gray-600 mb-1">Nomor SPDP</label>
+          <div>
+            <label className="text-sm text-gray-600">Nomor SPDP</label>
             <input
               name="nomor_spdp"
               value={form.nomor_spdp}
               onChange={handleChange}
-              className={`p-3 border rounded-lg focus:ring-2 focus:ring-green-700 outline-none transition ${
+              className={`w-full p-3 border rounded-lg mt-1 ${
                 errors.nomor_spdp ? "border-red-500" : ""
               }`}
             />
             {errors.nomor_spdp && (
-              <span className="text-red-500 text-sm mt-1">
-                {errors.nomor_spdp}
-              </span>
+              <p className="text-red-500 text-sm">{errors.nomor_spdp}</p>
             )}
           </div>
 
           {/* TANGGAL */}
-          <div className="flex flex-col">
-            <label className="text-sm text-gray-600 mb-1">Tanggal SPDP</label>
+          <div>
+            <label className="text-sm text-gray-600">Tanggal SPDP</label>
             <input
               type="date"
               name="tanggal_spdp"
               value={form.tanggal_spdp}
               onChange={handleChange}
-              className={`p-3 border rounded-lg focus:ring-2 focus:ring-green-700 outline-none transition ${
+              className={`w-full p-3 border rounded-lg mt-1 ${
                 errors.tanggal_spdp ? "border-red-500" : ""
               }`}
             />
             {errors.tanggal_spdp && (
-              <span className="text-red-500 text-sm mt-1">
-                {errors.tanggal_spdp}
-              </span>
+              <p className="text-red-500 text-sm">{errors.tanggal_spdp}</p>
+            )}
+          </div>
+
+          {/* ASAL INSTANSI */}
+          <div>
+            <label className="text-sm text-gray-600">Asal Instansi</label>
+            <input
+              name="asal_instansi"
+              value={form.asal_instansi}
+              onChange={handleChange}
+              placeholder="Contoh: Polres Sleman"
+              className={`w-full p-3 border rounded-lg mt-1 ${
+                errors.asal_instansi ? "border-red-500" : ""
+              }`}
+            />
+            {errors.asal_instansi && (
+              <p className="text-red-500 text-sm">{errors.asal_instansi}</p>
             )}
           </div>
 
           {/* TERSANGKA */}
-          <div className="flex flex-col">
-            <label className="text-sm text-gray-600 mb-1">Nama Tersangka</label>
+          <div>
+            <label className="text-sm text-gray-600">Nama Tersangka</label>
             <input
               name="nama_tersangka"
               value={form.nama_tersangka}
               onChange={handleChange}
-              className={`p-3 border rounded-lg focus:ring-2 focus:ring-green-700 outline-none transition ${
+              className={`w-full p-3 border rounded-lg mt-1 ${
                 errors.nama_tersangka ? "border-red-500" : ""
               }`}
             />
             {errors.nama_tersangka && (
-              <span className="text-red-500 text-sm mt-1">
-                {errors.nama_tersangka}
-              </span>
+              <p className="text-red-500 text-sm">{errors.nama_tersangka}</p>
             )}
           </div>
 
           {/* PASAL */}
-          <div className="flex flex-col">
-            <label className="text-sm text-gray-600 mb-1">Pasal</label>
+          <div>
+            <label className="text-sm text-gray-600">Pasal</label>
             <input
               name="pasal"
               value={form.pasal}
               onChange={handleChange}
-              className={`p-3 border rounded-lg focus:ring-2 focus:ring-green-700 outline-none transition ${
+              placeholder="Contoh: Pasal 378 KUHP"
+              className={`w-full p-3 border rounded-lg mt-1 ${
                 errors.pasal ? "border-red-500" : ""
               }`}
             />
             {errors.pasal && (
-              <span className="text-red-500 text-sm mt-1">{errors.pasal}</span>
+              <p className="text-red-500 text-sm">{errors.pasal}</p>
             )}
           </div>
 

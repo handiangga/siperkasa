@@ -8,6 +8,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 
 import spdpRoutes from "./spdpRoutes";
 import jaksaRoutes from "./jaksaRoutes";
+import p16Routes from "./p16Routes";
 
 import userRoutes from "./userRoutes";
 
@@ -25,6 +26,7 @@ export default function AppRoutes() {
           {/* MODULE */}
           {spdpRoutes}
           {jaksaRoutes}
+          {p16Routes}
           {userRoutes}
         </Route>
       </Route>

@@ -1,10 +1,17 @@
-const { Jaksa } = require("../models");
+const { Jaksa, P16Assignment } = require("../models");
 
 class JaksaController {
   // 🔍 GET SEMUA JAKSA
+
   static async getAll(req, res, next) {
     try {
-      const data = await Jaksa.findAll();
+      const data = await Jaksa.findAll({
+        include: [
+          {
+            model: P16Assignment,
+          },
+        ],
+      });
 
       res.status(200).json(data);
     } catch (err) {

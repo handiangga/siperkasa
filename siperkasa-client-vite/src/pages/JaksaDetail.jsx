@@ -18,19 +18,31 @@ export default function JaksaDetail() {
     try {
       setLoading(true);
 
-      // 🔥 detail jaksa
       const resJaksa = await api.get(`/jaksas/${id}`);
       setJaksa(resJaksa.data);
 
-      // 🔥 perkara P16 berdasarkan jaksa
       const resPerkara = await api.get(`/p16/jaksa/${id}`);
-      console.log("DATA P16:", resPerkara.data); // debug
       setPerkara(resPerkara.data);
+
+      console.log("PERKARA:", resPerkara.data); // debug
     } catch (err) {
       console.log(err);
     } finally {
       setLoading(false);
     }
+  };
+
+  // 🔥 warna status
+  const getStatusColor = (status) => {
+    if (!status) return "bg-gray-100 text-gray-600";
+
+    if (status === "penyidikan") return "bg-yellow-100 text-yellow-700";
+
+    if (status === "penuntutan") return "bg-blue-100 text-blue-700";
+
+    if (status === "selesai") return "bg-green-100 text-green-700";
+
+    return "bg-gray-100 text-gray-600";
   };
 
   return (
@@ -47,7 +59,7 @@ export default function JaksaDetail() {
         </button>
       </div>
 
-      {/* INFO JAKSA */}
+      {/* INFO */}
       <div className="bg-white p-6 rounded-xl shadow mb-6">
         <p>
           <b>Nama:</b> {jaksa.nama}
@@ -55,9 +67,22 @@ export default function JaksaDetail() {
         <p>
           <b>NIP:</b> {jaksa.nip}
         </p>
+        <p>
+          <b>Jabatan:</b> {jaksa.jabatan || "-"}
+        </p>
+        <p>
+          <b>Pangkat:</b> {jaksa.pangkat || "-"}
+        </p>
+
+        <p className="mt-4">
+          <b>Total P16:</b>{" "}
+          <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full">
+            {perkara.length}
+          </span>
+        </p>
       </div>
 
-      {/* TABLE P16 */}
+      {/* TABLE */}
       <div className="bg-white rounded-xl shadow overflow-hidden">
         {loading ? (
           <p className="p-4 text-center">Loading...</p>
@@ -69,29 +94,47 @@ export default function JaksaDetail() {
                 <th>Nomor P16</th>
                 <th>Tersangka</th>
                 <th>Pasal</th>
+                <th>Status</th> {/* 🔥 baru */}
               </tr>
             </thead>
 
             <tbody>
               {perkara.length === 0 ? (
                 <tr>
-                  <td colSpan="4" className="p-4 text-center">
+                  <td colSpan="5" className="p-6 text-center text-gray-500">
                     Belum ada perkara
                   </td>
                 </tr>
               ) : (
-                perkara.map((item, i) => (
-                  <tr key={item.id} className="text-center border-t">
-                    <td>{i + 1}</td>
+                perkara.map((item, i) => {
+                  const status = item.Perkara?.status?.toLowerCase();
 
-                    {/* 🔥 dari P16Assignment */}
-                    <td>{item.nomor_p16}</td>
+                  return (
+                    <tr
+                      key={item.id}
+                      className="text-center border-t hover:bg-gray-50"
+                    >
+                      <td>{i + 1}</td>
 
-                    {/* 🔥 dari relasi Perkara */}
-                    <td>{item.Perkara?.Spdp?.nama_tersangka || "-"}</td>
-                    <td>{item.Perkara?.Spdp?.pasal || "-"}</td>
-                  </tr>
-                ))
+                      <td>{item.nomor_p16 || "-"}</td>
+
+                      <td>{item.Perkara?.Spdp?.nama_tersangka || "-"}</td>
+
+                      <td>{item.Perkara?.Spdp?.pasal || "-"}</td>
+
+                      {/* 🔥 STATUS */}
+                      <td>
+                        <span
+                          className={`px-3 py-1 rounded-full text-sm ${getStatusColor(
+                            status,
+                          )}`}
+                        >
+                          {status || "-"}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>
