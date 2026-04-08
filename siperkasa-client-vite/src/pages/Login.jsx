@@ -89,7 +89,11 @@ export default function Login() {
       {/* LEFT */}
       <div className="hidden md:flex w-1/2 bg-green-900 text-white items-center justify-center">
         <div className="text-center px-10">
-          <img src="/logo.png" alt="logo" className="w-24 mx-auto mb-4" />
+          <img
+            src="../logo/kejaksaan-agung-ri-seeklogo.png"
+            alt="logo"
+            className="w-24 mx-auto mb-4"
+          />
           <h1 className="text-3xl font-bold text-yellow-400 mb-3">SIPERKASA</h1>
           <p className="text-gray-300">Sistem Informasi Perkara Jaksa</p>
         </div>

@@ -82,6 +82,7 @@ class UserController {
         id: user.id,
         email: user.email,
         role: user.role,
+        name: user.name,
         jaksa_id: user.jaksa_id,
       });
 

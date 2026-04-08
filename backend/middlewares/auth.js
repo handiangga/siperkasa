@@ -28,6 +28,7 @@ async function authentication(req, res, next) {
       id: user.id,
       role: user.role,
       email: user.email,
+      name: user.name,
       jaksa_id: user.jaksa_id,
     };
 

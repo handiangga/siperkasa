@@ -4,20 +4,22 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Perkara extends Model {
     static associate(models) {
-      // relasi ke SPDP
+      // 🔥 SPDP
       Perkara.belongsTo(models.Spdp, {
         foreignKey: "spdp_id",
+        as: "Spdp",
       });
 
-      // relasi ke User (creator)
+      // 🔥 creator
       Perkara.belongsTo(models.User, {
         foreignKey: "created_by",
         as: "creator",
       });
 
-      // relasi ke P16
+      // 🔥 P16
       Perkara.hasMany(models.P16Assignment, {
         foreignKey: "perkara_id",
+        as: "P16Assignments",
       });
     }
   }
@@ -33,21 +35,11 @@ module.exports = (sequelize, DataTypes) => {
       },
 
       status: {
-        type: DataTypes.ENUM(
-          "penyidikan",
-          "tahap1",
-          "p21",
-          "sidang"
-        ),
+        type: DataTypes.ENUM("penyidikan", "tahap1", "p21", "sidang"),
         defaultValue: "penyidikan",
         validate: {
           isIn: {
-            args: [[
-              "penyidikan",
-              "tahap1",
-              "p21",
-              "sidang"
-            ]],
+            args: [["penyidikan", "tahap1", "p21", "sidang"]],
             msg: "Status tidak valid",
           },
         },
@@ -58,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Perkara",
-    }
+    },
   );
 
   return Perkara;

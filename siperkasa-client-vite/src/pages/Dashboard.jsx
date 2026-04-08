@@ -207,7 +207,7 @@ export default function Dashboard() {
         Dashboard ({user.role})
       </h2>
 
-      {/* 🔔 NOTIF */}
+      {/* 🔔 NOTIF
       <div className="bg-white p-4 rounded shadow mb-6">
         <div className="flex items-center gap-2 mb-2">
           <FaBell /> <b>Notifikasi</b>
@@ -220,7 +220,7 @@ export default function Dashboard() {
         {notif.p16.map((n) => (
           <p key={n.id}>⚖️ P16 baru</p>
         ))}
-      </div>
+      </div> */}
 
       {/* FILTER */}
       <select

@@ -23,6 +23,8 @@ export default function SpdpDetail() {
 
   if (!data) return <p className="p-6">Loading...</p>;
 
+  const perkara = data.Perkara;
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       {/* HEADER */}
@@ -31,19 +33,22 @@ export default function SpdpDetail() {
 
         <button
           onClick={() => navigate("/spdp")}
-          className="bg-gray-500 text-white px-4 py-2 rounded"
+          className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
         >
           Kembali
         </button>
       </div>
 
-      {/* INFO SPDP */}
-      <div className="bg-white p-6 rounded-xl shadow mb-6">
+      {/* 🔥 INFO SPDP */}
+      <div className="bg-white p-6 rounded-xl shadow mb-6 space-y-2">
         <p>
           <b>Nomor:</b> {data.nomor_spdp}
         </p>
         <p>
           <b>Tanggal:</b> {data.tanggal_spdp?.split("T")[0]}
+        </p>
+        <p>
+          <b>Asal Instansi:</b> {data.asal_instansi || "-"}
         </p>
         <p>
           <b>Tersangka:</b> {data.nama_tersangka}
@@ -53,40 +58,46 @@ export default function SpdpDetail() {
         </p>
       </div>
 
-      {/* PERKARA */}
+      {/* 🔥 DATA PERKARA */}
       <div className="bg-white rounded-xl shadow overflow-hidden">
-        <h3 className="p-4 font-semibold text-green-800">Data Perkara</h3>
+        <h3 className="p-4 font-semibold text-green-800 border-b">
+          Data Perkara
+        </h3>
 
-        <table className="w-full">
+        <table className="w-full text-center">
           <thead className="bg-green-800 text-white">
             <tr>
               <th className="p-3">Status</th>
-              <th>Jaksa</th>
-              <th>Nomor P16</th>
+              <th>Aksi</th>
             </tr>
           </thead>
 
           <tbody>
-            {!data.Perkara ? (
+            {!perkara ? (
               <tr>
-                <td colSpan="3" className="p-4 text-center">
+                <td colSpan="2" className="p-4 text-center">
                   Belum ada perkara
                 </td>
               </tr>
-            ) : data.Perkara.P16Assignments?.length === 0 ? (
-              <tr>
-                <td colSpan="3" className="p-4 text-center">
-                  Belum ada jaksa ditugaskan
+            ) : (
+              <tr className="border-t">
+                {/* STATUS */}
+                <td>
+                  <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-medium">
+                    {perkara.status}
+                  </span>
+                </td>
+
+                {/* AKSI */}
+                <td>
+                  <button
+                    onClick={() => navigate(`/p16/${perkara.id}`)}
+                    className="bg-blue-500 text-white px-3 py-1 rounded hover:scale-105 transition"
+                  >
+                    Lihat P16
+                  </button>
                 </td>
               </tr>
-            ) : (
-              data.Perkara.P16Assignments.map((p16) => (
-                <tr key={p16.id} className="text-center border-t">
-                  <td>{data.Perkara.status}</td>
-                  <td>{p16.Jaksa?.nama}</td>
-                  <td>{p16.nomor_p16}</td>
-                </tr>
-              ))
             )}
           </tbody>
         </table>

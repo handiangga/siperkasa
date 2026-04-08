@@ -11,7 +11,13 @@ router.post("/", authentication, validateSpdp, SpdpController.create);
 // get all
 router.get("/", authentication, SpdpController.getAll);
 
-//get by id
+// get by id
 router.get("/:id", authentication, SpdpController.getById);
+
+// ✏️ update
+router.put("/:id", authentication, validateSpdp, SpdpController.update);
+
+// delete
+router.delete("/:id", authentication, SpdpController.delete);
 
 module.exports = router;

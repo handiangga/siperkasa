@@ -24,14 +24,22 @@ export default function P16EditPage() {
       setJaksaList(jaksaRes.data);
 
       if (p16Res.data.length > 0) {
+        // ✅ kalau sudah ada P16
         setPerkara(p16Res.data[0].Perkara);
 
         setTimJaksa(
           p16Res.data.map((j) => ({
             jaksa_id: j.jaksa_id,
             peran: j.peran,
-          })),
+          }))
         );
+      } else {
+        // 🔥 FIX: ambil data perkara langsung
+        const perkaraRes = await api.get(`/perkaras/${id}`);
+        setPerkara(perkaraRes.data);
+
+        // 🔥 kasih 1 slot kosong biar langsung bisa pilih
+        setTimJaksa([{ jaksa_id: "", peran: "utama" }]);
       }
     } catch (err) {
       console.log(err);
@@ -54,21 +62,15 @@ export default function P16EditPage() {
     setTimJaksa(newData);
   };
 
-  // ================= DELETE (PAKE ALERT) =================
+  // ================= DELETE =================
   const handleDeleteJaksa = (index) => {
     Swal.fire({
       title: "Yakin hapus jaksa?",
-      text: "Data jaksa akan dihapus dari tim",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#6b7280",
-      confirmButtonText: "Ya, hapus!",
-      cancelButtonText: "Batal",
-    }).then((result) => {
-      if (result.isConfirmed) {
+    }).then((res) => {
+      if (res.isConfirmed) {
         setTimJaksa((prev) => prev.filter((_, i) => i !== index));
-        Swal.fire("Dihapus!", "Jaksa berhasil dihapus", "success");
       }
     });
   };
@@ -121,13 +123,16 @@ export default function P16EditPage() {
         </button>
       </div>
 
-      {/* INFO */}
+      {/* 🔥 INFO SPDP (INI YANG KAMU MAU) */}
       <div className="bg-white p-6 rounded-xl shadow mb-6">
         <p>
-          <strong>Tersangka:</strong> {spdp?.nama_tersangka}
+          <strong>No Perkara:</strong> {spdp?.nomor_spdp || "-"}
         </p>
         <p>
-          <strong>Pasal:</strong> {spdp?.pasal}
+          <strong>Tersangka:</strong> {spdp?.nama_tersangka || "-"}
+        </p>
+        <p>
+          <strong>Pasal:</strong> {spdp?.pasal || "-"}
         </p>
       </div>
 
@@ -151,7 +156,6 @@ export default function P16EditPage() {
 
         {timJaksa.map((j, i) => (
           <div key={i} className="flex gap-2 mb-3">
-            {/* SELECT JAKSA */}
             <select
               className="border p-2 w-full rounded"
               value={j.jaksa_id}
@@ -163,7 +167,7 @@ export default function P16EditPage() {
                   key={jk.id}
                   value={jk.id}
                   disabled={timJaksa.some(
-                    (t, idx) => t.jaksa_id == jk.id && idx !== i,
+                    (t, idx) => t.jaksa_id == jk.id && idx !== i
                   )}
                 >
                   {jk.nama}
@@ -171,7 +175,6 @@ export default function P16EditPage() {
               ))}
             </select>
 
-            {/* PERAN */}
             <select
               value={j.peran}
               onChange={(e) => updateJaksa(i, "peran", e.target.value)}
@@ -181,7 +184,6 @@ export default function P16EditPage() {
               <option value="anggota">Anggota</option>
             </select>
 
-            {/* DELETE */}
             <button
               onClick={() => handleDeleteJaksa(i)}
               className="bg-red-500 text-white px-3 rounded"
@@ -198,9 +200,10 @@ export default function P16EditPage() {
           + Tambah Jaksa
         </button>
 
-        {/* VALIDASI */}
         {!timJaksa.some((j) => j.peran === "utama") && (
-          <p className="text-red-500 text-sm mt-2">Harus ada 1 jaksa utama</p>
+          <p className="text-red-500 text-sm mt-2">
+            Harus ada 1 jaksa utama
+          </p>
         )}
       </div>
 

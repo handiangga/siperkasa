@@ -23,6 +23,25 @@ export default function P16DetailPage() {
 
   if (!data) return <div className="p-6">Loading...</div>;
 
+  if (data.length === 0) {
+    return (
+      <div className="p-6">
+        <h2 className="text-2xl font-bold text-green-800 mb-4">Detail P16</h2>
+
+        <div className="bg-white p-6 rounded-xl shadow">
+          Belum ada penunjukan jaksa (P16)
+        </div>
+
+        <button
+          onClick={() => navigate(`/p16/edit/${id}`)}
+          className="mt-4 bg-green-700 text-white px-4 py-2 rounded"
+        >
+          Assign Jaksa
+        </button>
+      </div>
+    );
+  }
+
   // 🔥 ambil data dasar
   const perkara = data[0]?.Perkara;
   const spdp = perkara?.Spdp;

@@ -33,6 +33,10 @@ export default function JaksaPage() {
     fetchData();
   }, []);
 
+  // 🔥 HITUNG COUNT (HANYA UTAMA)
+  const getCount = (item) =>
+    item.P16Assignments?.filter((p) => p.peran === "utama").length ?? 0;
+
   // 🔍 FILTER
   const filtered = data.filter((item) =>
     `${item.nama} ${item.jabatan || ""} ${item.pangkat || ""}`
@@ -42,23 +46,33 @@ export default function JaksaPage() {
 
   // 🔥 SORT
   const sorted = [...filtered].sort((a, b) => {
-    const aCount = a.p16_count ?? a.P16Assignments?.length ?? 0;
-    const bCount = b.p16_count ?? b.P16Assignments?.length ?? 0;
+    const aCount = getCount(a);
+    const bCount = getCount(b);
     return sort === "desc" ? bCount - aCount : aCount - bCount;
   });
 
-  // 🔥 DASHBOARD DATA
+  // 🔥 TOTAL JAKSA
   const totalJaksa = data.length;
-  const totalP16 = data.reduce(
-    (acc, j) => acc + (j.p16_count ?? j.P16Assignments?.length ?? 0),
-    0,
-  );
 
+  // 🔥 TOTAL P16 (UNIQUE PERKARA)
+  const perkaraIds = new Set();
+
+  data.forEach((j) => {
+    j.P16Assignments?.forEach((p) => {
+      if (p.peran === "utama") {
+        perkaraIds.add(p.perkara_id);
+      }
+    });
+  });
+
+  const totalP16 = perkaraIds.size;
+
+  // 🔥 TOP JAKSA
   const topJaksa = [...data].sort((a, b) => {
-    const aCount = a.p16_count ?? a.P16Assignments?.length ?? 0;
-    const bCount = b.p16_count ?? b.P16Assignments?.length ?? 0;
-    return bCount - aCount;
+    return getCount(b) - getCount(a);
   })[0];
+
+  const topCount = getCount(topJaksa || {});
 
   // ❌ DELETE
   const handleDelete = (id) => {
@@ -111,7 +125,7 @@ export default function JaksaPage() {
         </div>
       </div>
 
-      {/* SEARCH + SORT ICON */}
+      {/* SEARCH + SORT */}
       <div className="bg-white p-4 rounded-xl shadow mb-4 flex justify-between items-center">
         <input
           type="text"
@@ -121,7 +135,6 @@ export default function JaksaPage() {
           className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-700 outline-none mr-4"
         />
 
-        {/* 🔥 SORT ICON */}
         <button
           onClick={() => setSort(sort === "desc" ? "asc" : "desc")}
           className="bg-gray-200 p-3 rounded-lg hover:bg-gray-300"
@@ -145,11 +158,8 @@ export default function JaksaPage() {
 
           <tbody>
             {sorted.map((item, i) => {
-              const count = item.p16_count ?? item.P16Assignments?.length ?? 0;
-
-              const isTop =
-                count ===
-                (topJaksa?.p16_count ?? topJaksa?.P16Assignments?.length ?? 0);
+              const count = getCount(item);
+              const isTop = count === topCount && count > 0;
 
               return (
                 <tr
@@ -165,8 +175,7 @@ export default function JaksaPage() {
                     onClick={() => navigate(`/jaksa/${item.id}`)}
                     className="cursor-pointer text-green-700 hover:underline"
                   >
-                    {item.nama}
-                    {isTop && " 🔥"}
+                    {item.nama} {isTop && "🔥"}
                   </td>
 
                   {/* JABATAN */}

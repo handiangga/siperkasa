@@ -4,17 +4,19 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class P16Assignment extends Model {
     static associate(models) {
-      // ke Perkara
+      // 🔥 ke Perkara
       P16Assignment.belongsTo(models.Perkara, {
         foreignKey: "perkara_id",
+        as: "Perkara", // 🔥 WAJIB
       });
 
-      // ke Jaksa
+      // 🔥 ke Jaksa
       P16Assignment.belongsTo(models.Jaksa, {
         foreignKey: "jaksa_id",
+        as: "Jaksa", // 🔥 WAJIB
       });
 
-      // ke User (creator)
+      // 🔥 ke User
       P16Assignment.belongsTo(models.User, {
         foreignKey: "created_by",
         as: "creator",
@@ -35,7 +37,6 @@ module.exports = (sequelize, DataTypes) => {
       },
 
       nomor_p16: DataTypes.STRING,
-
       tanggal_p16: DataTypes.DATE,
 
       peran: {

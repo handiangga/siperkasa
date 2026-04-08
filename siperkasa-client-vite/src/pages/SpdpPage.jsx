@@ -10,9 +10,13 @@ export default function SpdpPage() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
 
+  const [page, setPage] = useState(1);
+  const limit = 10;
+
   const navigate = useNavigate();
   const { isAdmin, isOperator } = useAuth();
 
+  // 🔥 FETCH DATA
   const fetchData = async () => {
     try {
       const res = await api.get("/spdps");
@@ -21,6 +25,13 @@ export default function SpdpPage() {
       console.log(err);
     }
   };
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 2000,
+  });
 
   useEffect(() => {
     fetchData();
@@ -33,16 +44,43 @@ export default function SpdpPage() {
       .includes(search.toLowerCase()),
   );
 
+  // 🔥 PAGINATION LOGIC
+  const totalPages = Math.ceil(filtered.length / limit);
+
+  const paginatedData = filtered.slice((page - 1) * limit, page * limit);
+
+  // 🔄 RESET PAGE KALAU SEARCH
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
+
   // ❌ DELETE
   const handleDelete = (id) => {
     Swal.fire({
       title: "Yakin hapus?",
+      text: "Data tidak bisa dikembalikan!",
       icon: "warning",
       showCancelButton: true,
+      confirmButtonColor: "#16a34a",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, hapus!",
     }).then(async (res) => {
       if (res.isConfirmed) {
-        await api.delete(`/spdps/${id}`);
-        fetchData();
+        try {
+          await api.delete(`/spdps/${id}`);
+
+          Toast.fire({
+            icon: "success",
+            title: "Data berhasil dihapus",
+          });
+
+          fetchData();
+        } catch (err) {
+          Toast.fire({
+            icon: "error",
+            title: "Gagal menghapus data",
+          });
+        }
       }
     });
   };
@@ -53,7 +91,6 @@ export default function SpdpPage() {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-green-800">Data SPDP</h2>
 
-        {/* 🔥 TOMBOL TAMBAH (ROLE BASED) */}
         {(isAdmin || isOperator) && (
           <button
             onClick={() => navigate("/spdp/create")}
@@ -77,66 +114,90 @@ export default function SpdpPage() {
 
       {/* TABLE */}
       <div className="bg-white rounded-xl shadow overflow-hidden">
-        <table className="w-full">
+        <table className="w-full table-fixed text-center">
           <thead className="bg-green-800 text-white">
             <tr>
-              <th className="p-3">No</th>
-              <th>Nomor</th>
-              <th>Tanggal</th>
-              <th>Tersangka</th>
+              <th className="p-3 w-12">No</th>
+              <th className="w-56">Nomor</th>
+              <th className="w-32">Tanggal</th>
+              <th className="w-64">Tersangka</th>
               <th>Pasal</th>
-              <th>Aksi</th>
+              <th className="w-32">Aksi</th>
             </tr>
           </thead>
 
           <tbody>
-            {filtered.map((item, i) => (
-              <tr
-                key={item.id}
-                className="text-center border-t hover:bg-gray-50"
-              >
-                <td>{i + 1}</td>
-                <td>{item.nomor_spdp}</td>
-                <td>{item.tanggal_spdp?.slice(0, 10)}</td>
-                <td>{item.nama_tersangka}</td>
-                <td>{item.pasal}</td>
+            {paginatedData.map((item, i) => (
+              <tr key={item.id} className="border-t hover:bg-gray-50">
+                <td className="p-3">{(page - 1) * limit + i + 1}</td>
 
-                <td className="space-x-2">
-                  {/* 👁 DETAIL (SEMUA BOLEH) */}
-                  <button
-                    onClick={() => navigate(`/spdp/${item.id}`)}
-                    className="bg-blue-500 text-white p-2 rounded hover:scale-110 transition"
-                    title="Detail"
-                  >
-                    <FaEye />
-                  </button>
+                <td className="px-3 py-2 text-sm break-words">
+                  {item.nomor_spdp}
+                </td>
 
-                  {/* ✏️ EDIT (ADMIN & OPERATOR) */}
-                  {(isAdmin || isOperator) && (
+                <td className="text-sm">{item.tanggal_spdp?.slice(0, 10)}</td>
+
+                <td className="px-3 py-2 text-sm break-words">
+                  {item.nama_tersangka}
+                </td>
+
+                <td className="px-3 py-2 text-sm break-words">{item.pasal}</td>
+
+                <td>
+                  <div className="flex justify-center gap-2">
                     <button
-                      onClick={() => navigate(`/spdp/edit/${item.id}`)}
-                      className="bg-yellow-400 p-2 rounded hover:scale-110 transition"
-                      title="Edit"
+                      onClick={() => navigate(`/spdp/${item.id}`)}
+                      className="bg-blue-500 text-white p-2 rounded hover:scale-110 transition"
                     >
-                      <FaEdit />
+                      <FaEye />
                     </button>
-                  )}
 
-                  {/* 🗑 DELETE (ADMIN ONLY) */}
-                  {isAdmin && (
-                    <button
-                      onClick={() => handleDelete(item.id)}
-                      className="bg-red-500 text-white p-2 rounded hover:scale-110 transition"
-                      title="Hapus"
-                    >
-                      <FaTrash />
-                    </button>
-                  )}
+                    {(isAdmin || isOperator) && (
+                      <button
+                        onClick={() => navigate(`/spdp/edit/${item.id}`)}
+                        className="bg-yellow-400 p-2 rounded hover:scale-110 transition"
+                      >
+                        <FaEdit />
+                      </button>
+                    )}
+
+                    {isAdmin && (
+                      <button
+                        onClick={() => handleDelete(item.id)}
+                        className="bg-red-500 text-white p-2 rounded hover:scale-110 transition"
+                      >
+                        <FaTrash />
+                      </button>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* 🔥 PAGINATION */}
+      <div className="flex justify-center mt-4 gap-2">
+        <button
+          disabled={page === 1}
+          onClick={() => setPage(page - 1)}
+          className="px-3 py-1 bg-gray-300 rounded disabled:opacity-50"
+        >
+          Prev
+        </button>
+
+        <span className="px-3 py-1">
+          {page} / {totalPages || 1}
+        </span>
+
+        <button
+          disabled={page === totalPages}
+          onClick={() => setPage(page + 1)}
+          className="px-3 py-1 bg-gray-300 rounded disabled:opacity-50"
+        >
+          Next
+        </button>
       </div>
     </div>
   );

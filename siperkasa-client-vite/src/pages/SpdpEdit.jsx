@@ -12,11 +12,12 @@ export default function SpdpEdit() {
   const [form, setForm] = useState({
     nomor_spdp: "",
     tanggal_spdp: "",
+    asal_instansi: "",
     nama_tersangka: "",
     pasal: "",
   });
 
-  // 🔥 FETCH DETAIL
+  // ================= FETCH =================
   const fetchData = async () => {
     try {
       const res = await api.get(`/spdps/${id}`);
@@ -24,6 +25,7 @@ export default function SpdpEdit() {
       setForm({
         nomor_spdp: res.data.nomor_spdp || "",
         tanggal_spdp: res.data.tanggal_spdp?.split("T")[0] || "",
+        asal_instansi: res.data.asal_instansi || "", // 🔥 FIX
         nama_tersangka: res.data.nama_tersangka || "",
         pasal: res.data.pasal || "",
       });
@@ -36,27 +38,49 @@ export default function SpdpEdit() {
     fetchData();
   }, []);
 
-  // 🔥 HANDLE INPUT
+  // ================= HANDLE INPUT =================
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    let newValue = value;
+
+    // 🔥 AUTO UPPERCASE KHUSUS NAMA
+    if (name === "nama_tersangka") {
+      newValue = value.toUpperCase();
+    }
+
     setForm({
       ...form,
-      [e.target.name]: e.target.value,
+      [name]: newValue,
     });
   };
 
-  // 🔥 SUBMIT
+  // ================= SUBMIT =================
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!form.nomor_spdp || !form.tanggal_spdp) {
-      Swal.fire("Oops", "Nomor & tanggal wajib diisi", "warning");
+    // 🔥 VALIDASI
+    if (
+      !form.nomor_spdp ||
+      !form.tanggal_spdp ||
+      !form.asal_instansi ||
+      !form.nama_tersangka ||
+      !form.pasal
+    ) {
+      Swal.fire("Oops", "Semua field wajib diisi", "warning");
       return;
     }
 
     try {
       setLoading(true);
 
-      await api.put(`/spdps/${id}`, form);
+      await api.put(`/spdps/${id}`, {
+        nomor_spdp: form.nomor_spdp.trim(),
+        tanggal_spdp: form.tanggal_spdp,
+        asal_instansi: form.asal_instansi.trim(),
+        nama_tersangka: form.nama_tersangka.trim(),
+        pasal: form.pasal.trim(),
+      });
 
       Swal.fire({
         icon: "success",
@@ -102,7 +126,6 @@ export default function SpdpEdit() {
               value={form.nomor_spdp}
               onChange={handleChange}
               className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-700 outline-none"
-              placeholder="Contoh: SPDP/001/2026"
             />
           </div>
 
@@ -120,7 +143,21 @@ export default function SpdpEdit() {
             />
           </div>
 
-          {/* TERSANGKA */}
+          {/* 🔥 ASAL INSTANSI (WAJIB) */}
+          <div>
+            <label className="block text-sm font-semibold mb-1">
+              Asal Instansi
+            </label>
+            <input
+              type="text"
+              name="asal_instansi"
+              value={form.asal_instansi}
+              onChange={handleChange}
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-700 outline-none"
+            />
+          </div>
+
+          {/* NAMA */}
           <div>
             <label className="block text-sm font-semibold mb-1">
               Nama Tersangka
@@ -131,7 +168,6 @@ export default function SpdpEdit() {
               value={form.nama_tersangka}
               onChange={handleChange}
               className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-700 outline-none"
-              placeholder="Nama tersangka"
             />
           </div>
 
@@ -144,7 +180,6 @@ export default function SpdpEdit() {
               value={form.pasal}
               onChange={handleChange}
               className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-700 outline-none"
-              placeholder="Contoh: Pasal 362 KUHP"
             />
           </div>
 

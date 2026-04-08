@@ -70,6 +70,55 @@ class SpdpController {
       next(err);
     }
   }
+
+  // ✏️ UPDATE SPDP
+  static async update(req, res, next) {
+    try {
+      const { id } = req.params;
+      const { nomor_spdp, tanggal_spdp, asal_instansi, nama_tersangka, pasal } =
+        req.body;
+
+      const spdp = await Spdp.findByPk(id);
+
+      if (!spdp) {
+        return res.status(404).json({ message: "Data tidak ditemukan" });
+      }
+
+      await spdp.update({
+        nomor_spdp,
+        tanggal_spdp,
+        asal_instansi,
+        nama_tersangka,
+        pasal,
+      });
+
+      res.status(200).json({
+        message: "SPDP berhasil diupdate",
+        data: spdp,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async delete(req, res) {
+    try {
+      const { id } = req.params;
+
+      const spdp = await Spdp.findByPk(id);
+
+      if (!spdp) {
+        return res.status(404).json({ message: "Data tidak ditemukan" });
+      }
+
+      await spdp.destroy();
+
+      res.json({ message: "Berhasil dihapus" });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
 }
 
 module.exports = SpdpController;
