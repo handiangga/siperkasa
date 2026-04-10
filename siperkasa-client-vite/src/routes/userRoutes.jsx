@@ -1,13 +1,23 @@
 import { Route } from "react-router-dom";
-import UserPage from "../pages/UserPage";
-import UserForm from "../pages/UserForm";
+import UserPage from "../pages/user/UserPage";
+import UserForm from "../pages/user/UserForm";
+import useAuth from "../hooks/useAuth";
 
-const userRoutes = (
-  <>
-    <Route path="/users" element={<UserPage />} />
-    <Route path="/users/create" element={<UserForm />} />
-    <Route path="/users/edit/:id" element={<UserForm />} />
-  </>
-);
+export default function UserRoutes() {
+  const { user } = useAuth();
 
-export default userRoutes;
+  if (user?.role !== "admin") return null;
+
+  return (
+    <>
+      {/* 🔥 EDIT */}
+      <Route path="/users/edit/:id" element={<UserForm />} />
+
+      {/* CREATE */}
+      <Route path="/users/create" element={<UserForm />} />
+
+      {/* LIST */}
+      <Route path="/users" element={<UserPage />} />
+    </>
+  );
+}

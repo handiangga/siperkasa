@@ -4,33 +4,48 @@ const router = express.Router();
 const PerkaraController = require("../controllers/perkaraController");
 const {
   authentication,
-  hasRole,
+  authorization,
   authorizationPerkara,
 } = require("../middlewares/auth");
 
-// get all (admin + kajari)
+// =========================
+// 🔥 GET ALL (ADMIN, KAJARI, OPERATOR)
+// =========================
 router.get(
   "/",
   authentication,
-  hasRole(["admin", "kajari"]),
+  authorization("admin", "kajari", "operator"),
   PerkaraController.getAll,
 );
 
-// my perkara (jaksa)
+// =========================
+// 🔥 MY PERKARA (JAKSA)
+// =========================
 router.get(
   "/my",
   authentication,
-  hasRole(["jaksa"]),
+  authorization("jaksa"),
   PerkaraController.getMyPerkara,
 );
 
-// 🔥 DETAIL (FIX PARAM)
+// =========================
+// 🔥 DETAIL (ROLE BASED)
+// =========================
 router.get(
-  "/:id",
+  "/:perkara_id",
   authentication,
   authorizationPerkara,
   PerkaraController.getDetail,
 );
-router.patch("/status/:id", authentication, PerkaraController.updateStatus);
+
+// =========================
+// 🔥 UPDATE STATUS (ADMIN ONLY)
+// =========================
+router.patch(
+  "/status/:perkara_id",
+  authentication,
+  authorization("admin"),
+  PerkaraController.updateStatus,
+);
 
 module.exports = router;

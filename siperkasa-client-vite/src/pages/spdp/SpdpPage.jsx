@@ -1,28 +1,36 @@
 import { useEffect, useState } from "react";
-import api from "../services/api";
+import api from "../../services/api";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
 import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
-import useAuth from "../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
+import { ENDPOINT } from "../../constants/endpoint";
+
+import Loading from "../../components/common/Loading";
+import Empty from "../../components/common/Empty";
 
 export default function SpdpPage() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
-
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+
   const limit = 10;
 
   const navigate = useNavigate();
   const { isAdmin, isOperator } = useAuth();
 
-  // 🔥 FETCH DATA
   const fetchData = async () => {
     try {
-      const res = await api.get("/spdps");
-      setData(res.data);
+      setLoading(true);
+      const res = await api.get(ENDPOINT.SPDP); // 🔥 FIX
+      setData(res.data || []);
     } catch (err) {
       console.log(err);
+      setData([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -37,24 +45,19 @@ export default function SpdpPage() {
     fetchData();
   }, []);
 
-  // 🔍 FILTER
   const filtered = data.filter((item) =>
-    `${item.nomor_spdp} ${item.nama_tersangka} ${item.pasal}`
+    `${item.nomor_spdp} ${item.nama_tersangka} ${item.pasal || ""}`
       .toLowerCase()
       .includes(search.toLowerCase()),
   );
 
-  // 🔥 PAGINATION LOGIC
   const totalPages = Math.ceil(filtered.length / limit);
-
   const paginatedData = filtered.slice((page - 1) * limit, page * limit);
 
-  // 🔄 RESET PAGE KALAU SEARCH
   useEffect(() => {
     setPage(1);
   }, [search]);
 
-  // ❌ DELETE
   const handleDelete = (id) => {
     Swal.fire({
       title: "Yakin hapus?",
@@ -67,7 +70,7 @@ export default function SpdpPage() {
     }).then(async (res) => {
       if (res.isConfirmed) {
         try {
-          await api.delete(`/spdps/${id}`);
+          await api.delete(`${ENDPOINT.SPDP}/${id}`); // 🔥 FIX
 
           Toast.fire({
             icon: "success",
@@ -84,6 +87,9 @@ export default function SpdpPage() {
       }
     });
   };
+
+  if (loading) return <Loading />;
+  if (!data.length) return <Empty text="Belum ada data SPDP" />;
 
   return (
     <div>
@@ -147,7 +153,7 @@ export default function SpdpPage() {
                   <div className="flex justify-center gap-2">
                     <button
                       onClick={() => navigate(`/spdp/${item.id}`)}
-                      className="bg-blue-500 text-white p-2 rounded hover:scale-110 transition"
+                      className="bg-blue-500 text-white p-2 rounded hover:scale-110"
                     >
                       <FaEye />
                     </button>
@@ -155,7 +161,7 @@ export default function SpdpPage() {
                     {(isAdmin || isOperator) && (
                       <button
                         onClick={() => navigate(`/spdp/edit/${item.id}`)}
-                        className="bg-yellow-400 p-2 rounded hover:scale-110 transition"
+                        className="bg-yellow-400 p-2 rounded hover:scale-110"
                       >
                         <FaEdit />
                       </button>
@@ -164,7 +170,7 @@ export default function SpdpPage() {
                     {isAdmin && (
                       <button
                         onClick={() => handleDelete(item.id)}
-                        className="bg-red-500 text-white p-2 rounded hover:scale-110 transition"
+                        className="bg-red-500 text-white p-2 rounded hover:scale-110"
                       >
                         <FaTrash />
                       </button>
@@ -177,7 +183,7 @@ export default function SpdpPage() {
         </table>
       </div>
 
-      {/* 🔥 PAGINATION */}
+      {/* PAGINATION */}
       <div className="flex justify-center mt-4 gap-2">
         <button
           disabled={page === 1}

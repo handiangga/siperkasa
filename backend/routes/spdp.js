@@ -2,22 +2,60 @@ const express = require("express");
 const router = express.Router();
 
 const SpdpController = require("../controllers/spdpController");
-const { authentication } = require("../middlewares/auth");
+const { authentication, authorization } = require("../middlewares/auth");
+
 const { validateSpdp } = require("../middlewares/validation");
 
-// create
-router.post("/", authentication, validateSpdp, SpdpController.create);
+// =========================
+// 🔥 CREATE (ADMIN + OPERATOR)
+// =========================
+router.post(
+  "/",
+  authentication,
+  authorization("admin", "operator"),
+  validateSpdp,
+  SpdpController.create,
+);
 
-// get all
-router.get("/", authentication, SpdpController.getAll);
+// =========================
+// 🔥 GET ALL (ADMIN, KAJARI, OPERATOR)
+// =========================
+router.get(
+  "/",
+  authentication,
+  authorization("admin", "kajari", "operator"),
+  SpdpController.getAll,
+);
 
-// get by id
-router.get("/:id", authentication, SpdpController.getById);
+// =========================
+// 🔥 GET BY ID
+// =========================
+router.get(
+  "/:id",
+  authentication,
+  authorization("admin", "kajari", "operator"),
+  SpdpController.getById,
+);
 
-// ✏️ update
-router.put("/:id", authentication, validateSpdp, SpdpController.update);
+// =========================
+// ✏️ UPDATE (ADMIN ONLY)
+// =========================
+router.put(
+  "/:id",
+  authentication,
+  authorization("admin"),
+  validateSpdp,
+  SpdpController.update,
+);
 
-// delete
-router.delete("/:id", authentication, SpdpController.delete);
+// =========================
+// ❌ DELETE (ADMIN ONLY)
+// =========================
+router.delete(
+  "/:id",
+  authentication,
+  authorization("admin"),
+  SpdpController.delete,
+);
 
 module.exports = router;

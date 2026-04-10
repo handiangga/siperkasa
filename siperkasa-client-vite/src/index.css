@@ -29,8 +29,8 @@
 
   font: 16px/145% var(--sans);
   letter-spacing: 0.2px;
-  color: var(--text);
   background: var(--bg);
+  color: #111827;
 }
 
 /* DARK MODE */

@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../services/api";
+import api from "../../services/api";
 import Swal from "sweetalert2";
+import { ENDPOINT } from "../../constants/endpoint";
+
+import Loading from "../../components/common/Loading";
 
 export default function P16EditPage() {
   const { id } = useParams();
@@ -11,38 +14,45 @@ export default function P16EditPage() {
   const [jaksaList, setJaksaList] = useState([]);
   const [perkara, setPerkara] = useState(null);
   const [status, setStatus] = useState("penyidikan");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // ================= FETCH DATA =================
   const fetchData = async () => {
     try {
+      setLoading(true);
+
       const [p16Res, jaksaRes] = await Promise.all([
         api.get(`/p16/perkara/${id}`),
-        api.get("/jaksas"),
+        api.get(ENDPOINT.JAKSA),
       ]);
 
-      setJaksaList(jaksaRes.data);
+      setJaksaList(jaksaRes.data || []);
 
-      if (p16Res.data.length > 0) {
-        // ✅ kalau sudah ada P16
-        setPerkara(p16Res.data[0].Perkara);
+      if (p16Res.data && p16Res.data.length > 0) {
+        const perkaraData = p16Res.data[0]?.Perkara;
+
+        setPerkara(perkaraData || {});
+        setStatus(perkaraData?.status || "penyidikan");
 
         setTimJaksa(
           p16Res.data.map((j) => ({
             jaksa_id: j.jaksa_id,
             peran: j.peran,
-          }))
+          })),
         );
       } else {
-        // 🔥 FIX: ambil data perkara langsung
-        const perkaraRes = await api.get(`/perkaras/${id}`);
-        setPerkara(perkaraRes.data);
+        const perkaraRes = await api.get(`${ENDPOINT.PERKARA}/${id}`);
 
-        // 🔥 kasih 1 slot kosong biar langsung bisa pilih
+        setPerkara(perkaraRes.data || {});
+        setStatus(perkaraRes.data?.status || "penyidikan");
+
         setTimJaksa([{ jaksa_id: "", peran: "utama" }]);
       }
     } catch (err) {
-      console.log(err);
+      console.log("ERROR:", err.response?.data || err.message);
+      setPerkara({});
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -50,7 +60,7 @@ export default function P16EditPage() {
     fetchData();
   }, []);
 
-  // ================= TAMBAH JAKSA =================
+  // ================= TAMBAH =================
   const addJaksa = () => {
     setTimJaksa([...timJaksa, { jaksa_id: "", peran: "anggota" }]);
   };
@@ -65,7 +75,7 @@ export default function P16EditPage() {
   // ================= DELETE =================
   const handleDeleteJaksa = (index) => {
     Swal.fire({
-      title: "Yakin hapus jaksa?",
+      title: "Hapus jaksa?",
       icon: "warning",
       showCancelButton: true,
     }).then((res) => {
@@ -87,27 +97,51 @@ export default function P16EditPage() {
 
       setLoading(true);
 
-      await api.put(`/p16/${id}`, {
+      console.log("PARAM ID:", id);
+      console.log("PERKARA:", perkara);
+
+      // 🔥 1. UPDATE P16 (AMAN)
+      await api.put(`${ENDPOINT.P16}/${id}`, {
         jaksa_list: timJaksa,
       });
 
-      await api.patch(`/perkaras/status/${id}`, {
-        status,
-      });
+      // 🔥 2. AMBIL PERKARA ID PALING VALID
+      const perkaraId = perkara?.id || id;
+
+      console.log("FINAL PERKARA ID:", perkaraId);
+
+      // 🔥 3. UPDATE STATUS (JANGAN BIKIN CRASH)
+      try {
+        if (perkara?.id) {
+          await api.patch(`/perkara/status/${perkara.id}`, {
+            status,
+          });
+        }
+      } catch (err) {
+        if (err.response?.status !== 404) {
+          console.error(err);
+        }
+      }
 
       Swal.fire("Berhasil", "P16 berhasil diupdate", "success");
       navigate("/p16");
     } catch (err) {
       console.log(err);
-      Swal.fire("Error", "Gagal update", "error");
+
+      Swal.fire(
+        "Error",
+        err.response?.data?.message || "Gagal update",
+        "error",
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  if (!perkara) return <div className="p-6">Loading...</div>;
+  // ================= LOADING =================
+  if (loading) return <Loading />;
 
-  const spdp = perkara?.Spdp;
+  const spdp = perkara?.Spdp || {};
 
   return (
     <div className="p-6">
@@ -123,16 +157,16 @@ export default function P16EditPage() {
         </button>
       </div>
 
-      {/* 🔥 INFO SPDP (INI YANG KAMU MAU) */}
+      {/* INFO */}
       <div className="bg-white p-6 rounded-xl shadow mb-6">
         <p>
-          <strong>No Perkara:</strong> {spdp?.nomor_spdp || "-"}
+          <strong>No Perkara:</strong> {spdp.nomor_spdp || "-"}
         </p>
         <p>
-          <strong>Tersangka:</strong> {spdp?.nama_tersangka || "-"}
+          <strong>Tersangka:</strong> {spdp.nama_tersangka || "-"}
         </p>
         <p>
-          <strong>Pasal:</strong> {spdp?.pasal || "-"}
+          <strong>Pasal:</strong> {spdp.pasal || "-"}
         </p>
       </div>
 
@@ -145,12 +179,13 @@ export default function P16EditPage() {
           className="border p-2 w-full rounded"
         >
           <option value="penyidikan">Penyidikan</option>
-          <option value="penuntutan">Penuntutan</option>
-          <option value="selesai">Selesai</option>
+          <option value="tahap1">Tahap 1</option>
+          <option value="p21">P21</option>
+          <option value="sidang">Sidang</option>
         </select>
       </div>
 
-      {/* TIM JAKSA */}
+      {/* TIM */}
       <div className="bg-white p-6 rounded-xl shadow mb-6">
         <h3 className="font-bold mb-4">Tim Jaksa</h3>
 
@@ -167,7 +202,7 @@ export default function P16EditPage() {
                   key={jk.id}
                   value={jk.id}
                   disabled={timJaksa.some(
-                    (t, idx) => t.jaksa_id == jk.id && idx !== i
+                    (t, idx) => t.jaksa_id == jk.id && idx !== i,
                   )}
                 >
                   {jk.nama}
@@ -201,9 +236,7 @@ export default function P16EditPage() {
         </button>
 
         {!timJaksa.some((j) => j.peran === "utama") && (
-          <p className="text-red-500 text-sm mt-2">
-            Harus ada 1 jaksa utama
-          </p>
+          <p className="text-red-500 text-sm mt-2">Harus ada 1 jaksa utama</p>
         )}
       </div>
 

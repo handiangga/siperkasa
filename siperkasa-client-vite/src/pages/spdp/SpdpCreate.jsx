@@ -1,7 +1,8 @@
 import { useState } from "react";
-import api from "../services/api";
+import api from "../../services/api";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { ENDPOINT } from "../../constants/endpoint";
 
 export default function SpdpCreate() {
   const navigate = useNavigate();
@@ -15,18 +16,26 @@ export default function SpdpCreate() {
   });
 
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
-  // 🔥 HANDLE INPUT
+  // 🔥 INPUT
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    let newValue = value;
+
+    if (name === "nama_tersangka") {
+      newValue = value.toUpperCase();
+    }
+
     setForm({
       ...form,
-      [e.target.name]: e.target.value,
+      [name]: newValue,
     });
 
-    // clear error realtime
     setErrors({
       ...errors,
-      [e.target.name]: "",
+      [name]: "",
     });
   };
 
@@ -50,14 +59,16 @@ export default function SpdpCreate() {
 
     if (!validate()) return;
 
-    Swal.fire({
-      title: "Menyimpan...",
-      allowOutsideClick: false,
-      didOpen: () => Swal.showLoading(),
-    });
-
     try {
-      await api.post("/spdps", form);
+      setLoading(true);
+
+      Swal.fire({
+        title: "Menyimpan...",
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading(),
+      });
+
+      await api.post(ENDPOINT.SPDP, form); // 🔥 FIX
 
       Swal.fire({
         icon: "success",
@@ -70,6 +81,8 @@ export default function SpdpCreate() {
     } catch (err) {
       console.log(err);
       Swal.fire("Error", "Gagal menyimpan SPDP", "error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -93,7 +106,6 @@ export default function SpdpCreate() {
           onSubmit={handleSubmit}
           className="bg-white p-6 rounded-2xl shadow-lg space-y-5"
         >
-          {/* NOMOR */}
           <div>
             <label className="text-sm text-gray-600">Nomor SPDP</label>
             <input
@@ -109,7 +121,6 @@ export default function SpdpCreate() {
             )}
           </div>
 
-          {/* TANGGAL */}
           <div>
             <label className="text-sm text-gray-600">Tanggal SPDP</label>
             <input
@@ -126,14 +137,12 @@ export default function SpdpCreate() {
             )}
           </div>
 
-          {/* ASAL INSTANSI */}
           <div>
             <label className="text-sm text-gray-600">Asal Instansi</label>
             <input
               name="asal_instansi"
               value={form.asal_instansi}
               onChange={handleChange}
-              placeholder="Contoh: Polres Sleman"
               className={`w-full p-3 border rounded-lg mt-1 ${
                 errors.asal_instansi ? "border-red-500" : ""
               }`}
@@ -143,7 +152,6 @@ export default function SpdpCreate() {
             )}
           </div>
 
-          {/* TERSANGKA */}
           <div>
             <label className="text-sm text-gray-600">Nama Tersangka</label>
             <input
@@ -159,14 +167,12 @@ export default function SpdpCreate() {
             )}
           </div>
 
-          {/* PASAL */}
           <div>
             <label className="text-sm text-gray-600">Pasal</label>
             <input
               name="pasal"
               value={form.pasal}
               onChange={handleChange}
-              placeholder="Contoh: Pasal 378 KUHP"
               className={`w-full p-3 border rounded-lg mt-1 ${
                 errors.pasal ? "border-red-500" : ""
               }`}
@@ -176,12 +182,12 @@ export default function SpdpCreate() {
             )}
           </div>
 
-          {/* BUTTON */}
           <button
             type="submit"
-            className="w-full bg-green-800 text-white py-3 rounded-lg font-semibold hover:bg-green-900 transition"
+            disabled={loading}
+            className="w-full bg-green-800 text-white py-3 rounded-lg font-semibold"
           >
-            Simpan
+            {loading ? "Menyimpan..." : "Simpan"}
           </button>
         </form>
       </div>

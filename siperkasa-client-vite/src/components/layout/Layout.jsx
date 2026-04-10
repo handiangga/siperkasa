@@ -1,21 +1,20 @@
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getUser } from "../utils/auth";
+import { getUser } from "../../utils/auth";
 
 export default function Layout() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [open, setOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const data = getUser();
-    setUser(data);
+    setUser(getUser());
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("access_token");
     navigate("/");
   };
 
@@ -23,18 +22,17 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* 🔥 NAVBAR */}
+      {/* NAVBAR */}
       <div className="bg-gradient-to-r from-green-900 to-green-700 text-white px-8 py-4 flex justify-between items-center shadow-lg">
         {/* LEFT */}
         <div className="flex items-center gap-10">
           <h1
             onClick={() => navigate("/dashboard")}
-            className="font-bold text-xl tracking-wide cursor-pointer hover:text-yellow-300 transition"
+            className="font-bold text-xl cursor-pointer hover:text-yellow-300"
           >
             SIPERKASA
           </h1>
 
-          {/* MENU */}
           <div className="flex gap-3 text-sm font-medium">
             {[
               { name: "Dashboard", path: "/dashboard" },
@@ -45,10 +43,10 @@ export default function Layout() {
               <button
                 key={item.path}
                 onClick={() => navigate(item.path)}
-                className={`px-4 py-2 rounded-lg transition-all duration-200
+                className={`px-4 py-2 rounded-lg transition
                   ${
                     isActive(item.path)
-                      ? "bg-yellow-400 text-green-900 font-semibold shadow"
+                      ? "bg-yellow-400 text-green-900 font-semibold"
                       : "hover:bg-white/10"
                   }`}
               >
@@ -56,14 +54,13 @@ export default function Layout() {
               </button>
             ))}
 
-            {/* ADMIN ONLY */}
             {user?.role === "admin" && (
               <button
                 onClick={() => navigate("/users")}
-                className={`px-4 py-2 rounded-lg transition-all
+                className={`px-4 py-2 rounded-lg transition
                   ${
                     isActive("/users")
-                      ? "bg-yellow-400 text-green-900 font-semibold shadow"
+                      ? "bg-yellow-400 text-green-900 font-semibold"
                       : "hover:bg-white/10"
                   }`}
               >
@@ -73,47 +70,56 @@ export default function Layout() {
           </div>
         </div>
 
-        {/* RIGHT */}
+        {/* RIGHT (DROPDOWN PROFIL) */}
         <div className="relative">
-          <div
+          <button
             onClick={() => setOpen(!open)}
-            className="flex items-center gap-3 cursor-pointer hover:bg-white/10 px-3 py-2 rounded-lg transition"
+            className="flex items-center gap-3 bg-white/10 px-3 py-2 rounded-lg hover:bg-white/20"
           >
-            {/* AVATAR */}
-            <div className="w-9 h-9 bg-yellow-400 text-green-900 rounded-full flex items-center justify-center font-bold shadow">
-              {user?.email?.charAt(0)?.toUpperCase() || "U"}
+            {/* 🔵 AVATAR BULAT */}
+            <div className="w-9 h-9 flex items-center justify-center rounded-full bg-yellow-400 text-green-900 font-bold">
+              {user?.name?.charAt(0).toUpperCase()}
             </div>
 
-            {/* TEXT */}
-            <div className="text-left">
-              <p className="text-sm font-semibold capitalize">
-                Halo, {user?.name}
-              </p>
-              <p className="text-xs text-gray-200">{user?.role || "-"}</p>
+            {/* 👋 TEXT */}
+            <div className="text-left text-sm leading-tight">
+              <div className="font-semibold">Halo, {user?.name}</div>
+              <div className="text-xs">{user?.role}</div>
             </div>
-          </div>
+          </button>
 
           {/* DROPDOWN */}
           {open && (
-            <div className="absolute right-0 mt-3 w-64 bg-white text-black rounded-xl shadow-2xl p-5 border border-gray-100 animate-fadeIn">
-              <div className="mb-4">
-                <p className="text-xs text-gray-400">Role</p>
-                <p className="font-semibold capitalize">{user?.role}</p>
-              </div>
-
-              <div className="mb-4">
-                <p className="text-xs text-gray-400">Nama</p>
-                <p className="font-medium">{user?.name || "-"}</p>
-              </div>
-
-              <div className="mb-4">
-                <p className="text-xs text-gray-400">Email</p>
-                <p className="text-sm text-gray-600">{user?.email}</p>
+            <div className="absolute right-0 mt-2 w-52 bg-white text-black rounded-xl shadow-lg overflow-hidden z-50">
+              <div className="px-4 py-3 border-b">
+                <div className="font-semibold">{user?.name}</div>
+                <div className="text-gray-500 text-xs">{user?.role}</div>
+                <div className="text-gray-500 text-xs">{user?.email}</div>
               </div>
 
               <button
+                onClick={() => {
+                  setOpen(false);
+                  navigate("/profile");
+                }}
+                className="w-full text-left px-4 py-2 hover:bg-gray-100"
+              >
+                Profil
+              </button>
+
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  navigate("/change-password");
+                }}
+                className="w-full text-left px-4 py-2 hover:bg-gray-100"
+              >
+                Ganti Password
+              </button>
+
+              <button
                 onClick={handleLogout}
-                className="w-full bg-gradient-to-r from-green-800 to-green-700 text-white py-2 rounded-lg hover:opacity-90 transition font-medium"
+                className="w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100"
               >
                 Logout
               </button>
@@ -122,7 +128,7 @@ export default function Layout() {
         </div>
       </div>
 
-      {/* 🔥 CONTENT */}
+      {/* CONTENT */}
       <div className="p-6">
         <Outlet />
       </div>

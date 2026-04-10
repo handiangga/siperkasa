@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import api from "../services/api";
+import api from "../../services/api";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { ENDPOINT } from "../../constants/endpoint";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export default function Login() {
 
   // 🔥 AUTO REDIRECT
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("access_token"); // 🔥 FIX
 
     if (token && token !== "undefined") {
       navigate("/dashboard");
@@ -52,10 +53,10 @@ export default function Login() {
     });
 
     try {
-      const res = await api.post("/users/login", form);
+      const res = await api.post(`${ENDPOINT.USERS || "/users"}/login`, form);
 
-      // ✅ FIX TOKEN
-      localStorage.setItem("token", res.data.access_token);
+      // 🔥 FIX TOKEN
+      localStorage.setItem("access_token", res.data.access_token);
 
       Swal.close();
 
@@ -66,7 +67,6 @@ export default function Login() {
         confirmButtonColor: "#166534",
       });
 
-      // ✅ FIX REDIRECT
       navigate("/dashboard");
     } catch (err) {
       Swal.close();
@@ -90,7 +90,7 @@ export default function Login() {
       <div className="hidden md:flex w-1/2 bg-green-900 text-white items-center justify-center">
         <div className="text-center px-10">
           <img
-            src="../logo/kejaksaan-agung-ri-seeklogo.png"
+            src="/logo/kejaksaan-agung-ri-seeklogo.png"
             alt="logo"
             className="w-24 mx-auto mb-4"
           />

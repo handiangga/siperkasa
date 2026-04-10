@@ -2,24 +2,76 @@ const express = require("express");
 const router = express.Router();
 
 const P16Controller = require("../controllers/p16Controller");
-const { authentication } = require("../middlewares/auth");
+const { authentication, authorization } = require("../middlewares/auth");
 
-// ➕ create
-router.post("/", authentication, P16Controller.create);
+// =========================
+// 🔥 CREATE (ADMIN + OPERATOR)
+// =========================
+router.post(
+  "/",
+  authentication,
+  authorization("admin", "operator"),
+  P16Controller.create,
+);
 
-// 🔍 get semua
-router.get("/", authentication, P16Controller.getAll);
+// =========================
+// 🔥 GET ALL (ADMIN + KAJARI)
+// =========================
+router.get(
+  "/",
+  authentication,
+  authorization("admin", "kajari"),
+  P16Controller.getAll,
+);
 
-// 🔥 GET BY PERKARA (INI YANG BIKIN 404 TADI)
-router.get("/perkara/:id", authentication, P16Controller.getByPerkara);
+// =========================
+// 🔥 GET BY JAKSA (JAKSA ONLY)
+// =========================
+router.get(
+  "/jaksa/:id",
+  authentication,
+  authorization("admin", "kajari", "operator", "jaksa"),
+  P16Controller.getByJaksa,
+);
 
-// 🔍 detail
-router.get("/:id", authentication, P16Controller.getById);
+// =========================
+// 🔥 GET BY PERKARA
+// =========================
+router.get(
+  "/perkara/:id",
+  authentication,
+  authorization("admin", "kajari", "operator"),
+  P16Controller.getByPerkara,
+);
 
-router.put("/:perkara_id", authentication, P16Controller.update);
+// =========================
+// 🔥 DETAIL
+// =========================
+router.get(
+  "/:id",
+  authentication,
+  authorization("admin", "kajari", "operator"),
+  P16Controller.getById,
+);
 
-router.get("/jaksa/:id", authentication, P16Controller.getByJaksa);
-// ❌ delete (optional)
-router.delete("/:id", authentication, P16Controller.delete);
+// =========================
+// 🔥 UPDATE (ADMIN ONLY)
+// =========================
+router.put(
+  "/:id",
+  authentication,
+  authorization("admin"),
+  P16Controller.update,
+);
+
+// =========================
+// 🔥 DELETE (ADMIN ONLY)
+// =========================
+router.delete(
+  "/:id",
+  authentication,
+  authorization("admin"),
+  P16Controller.delete,
+);
 
 module.exports = router;

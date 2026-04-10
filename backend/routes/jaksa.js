@@ -2,38 +2,49 @@ const express = require("express");
 const router = express.Router();
 
 const JaksaController = require("../controllers/jaksaController");
-const { authentication, hasRole } = require("../middlewares/auth");
+const { authentication, authorization } = require("../middlewares/auth");
+
 const { validateJaksa } = require("../middlewares/validation");
 
-// 🔥 GET ALL
-router.get("/", authentication, JaksaController.getAll);
+// 🔥 GET ALL (admin, kajari, operator)
+router.get(
+  "/",
+  authentication,
+  authorization("admin", "kajari", "operator"),
+  JaksaController.getAll,
+);
 
-// 🔥 GET BY ID (INI YANG KURANG)
-router.get("/:id", authentication, JaksaController.getById);
+// 🔥 GET BY ID (admin, kajari, operator)
+router.get(
+  "/:id",
+  authentication,
+  authorization("admin", "kajari", "operator"),
+  JaksaController.getById,
+);
 
-// 🔥 CREATE
+// 🔥 CREATE (admin only)
 router.post(
   "/",
   authentication,
-  hasRole(["admin"]),
+  authorization("admin"),
   validateJaksa,
   JaksaController.create,
 );
 
-// 🔥 UPDATE
+// 🔥 UPDATE (admin only)
 router.put(
   "/:id",
   authentication,
-  hasRole(["admin"]),
+  authorization("admin"),
   validateJaksa,
   JaksaController.update,
 );
 
-// 🔥 DELETE
+// 🔥 DELETE (admin only)
 router.delete(
   "/:id",
   authentication,
-  hasRole(["admin"]),
+  authorization("admin"),
   JaksaController.delete,
 );
 

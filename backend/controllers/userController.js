@@ -1,6 +1,7 @@
 const { User } = require("../models");
 const { comparePassword } = require("../helpers/bcrypt");
 const { jwtSign } = require("../helpers/jwt");
+const bcrypt = require("bcryptjs");
 
 class UserController {
   // 🔹 REGISTER
@@ -107,6 +108,49 @@ class UserController {
     }
   }
 
+  // 🔥 GET BY ID
+  static async getById(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      const user = await User.findByPk(id);
+
+      if (!user) {
+        throw { name: "NotFound", message: "User tidak ditemukan" };
+      }
+
+      res.status(200).json(user);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  // 🔥 UPDATE
+  static async update(req, res, next) {
+    try {
+      const { id } = req.params;
+      const { name, email, role } = req.body;
+
+      const user = await User.findByPk(id);
+
+      if (!user) {
+        throw { name: "NotFound", message: "User tidak ditemukan" };
+      }
+
+      await user.update({
+        name,
+        email,
+        role,
+      });
+
+      res.status(200).json({
+        message: "User berhasil diupdate",
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
   // 🔹 DELETE USER
   static async delete(req, res, next) {
     try {
@@ -126,6 +170,48 @@ class UserController {
       res.status(200).json({
         message: "User berhasil dihapus",
       });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  // 🔥 PROFILE
+  static async getProfile(req, res, next) {
+    try {
+      const userId = req.user.id;
+
+      const user = await User.findByPk(userId, {
+        attributes: ["id", "name", "email", "role"],
+      });
+
+      res.json(user);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async changePassword(req, res, next) {
+    try {
+      const userId = req.user.id;
+      const { oldPassword, newPassword } = req.body;
+
+      const user = await User.scope(null).findByPk(userId);
+
+      if (!user) {
+        return res.status(404).json({ message: "User tidak ditemukan" });
+      }
+
+      const isMatch = await bcrypt.compare(oldPassword, user.password);
+
+      if (!isMatch) {
+        return res.status(400).json({ message: "Password lama salah" });
+      }
+
+      const hashed = await bcrypt.hash(newPassword, 10);
+
+      await user.update({ password: hashed });
+
+      res.json({ message: "Password berhasil diubah" });
     } catch (err) {
       next(err);
     }

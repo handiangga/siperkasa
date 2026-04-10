@@ -168,14 +168,17 @@ class P16Controller {
       next(err);
     }
   }
-
-  // ✏️ UPDATE
   static async update(req, res, next) {
     const t = await sequelize.transaction();
 
     try {
-      const { perkara_id } = req.params;
+      // 🔥 FIX UTAMA (AMBIL ID DENGAN AMAN)
+      const perkara_id = req.params.perkara_id || req.params.id;
+
       const { jaksa_list } = req.body;
+
+      console.log("PARAM:", req.params);
+      console.log("PERKARA_ID:", perkara_id);
 
       if (!jaksa_list || jaksa_list.length === 0) {
         throw {
@@ -189,6 +192,14 @@ class P16Controller {
         throw {
           name: "Bad Request",
           message: "Harus ada 1 jaksa utama",
+        };
+      }
+
+      // 🔥 SAFETY CHECK
+      if (!perkara_id) {
+        throw {
+          name: "Bad Request",
+          message: "perkara_id tidak ditemukan",
         };
       }
 
@@ -219,6 +230,7 @@ class P16Controller {
       });
     } catch (err) {
       await t.rollback();
+      console.log("ERROR UPDATE P16:", err); // 🔥 DEBUG
       next(err);
     }
   }

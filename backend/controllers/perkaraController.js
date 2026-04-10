@@ -100,10 +100,10 @@ class PerkaraController {
   // 🔄 UPDATE STATUS
   static async updateStatus(req, res, next) {
     try {
-      const { id } = req.params;
+      const { perkara_id } = req.params;
       const { status } = req.body;
 
-      const perkara = await Perkara.findByPk(id);
+      const perkara = await Perkara.findByPk(perkara_id);
 
       if (!perkara) {
         throw {

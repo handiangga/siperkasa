@@ -1,24 +1,33 @@
 import { useEffect, useState } from "react";
-import api from "../services/api";
+import api from "../../services/api";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
 import { FaEdit, FaTrash } from "react-icons/fa";
-import useAuth from "../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
+import { ENDPOINT } from "../../constants/endpoint";
+
+import Loading from "../../components/common/Loading";
+import Empty from "../../components/common/Empty";
 
 export default function UserPage() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
   const { isAdmin } = useAuth();
 
   const fetchData = async () => {
     try {
-      const res = await api.get("/users");
-      setData(res.data);
+      setLoading(true);
+      const res = await api.get("/users"); // tetap (login pakai ini juga)
+      setData(res.data || []);
     } catch (err) {
       console.log(err);
+      setData([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -32,6 +41,9 @@ export default function UserPage() {
       <div className="text-center mt-10 text-gray-500">Tidak punya akses</div>
     );
   }
+
+  if (loading) return <Loading />;
+  if (!data.length) return <Empty text="Belum ada user" />;
 
   // 🔍 FILTER
   const filtered = data.filter((item) =>
@@ -48,8 +60,14 @@ export default function UserPage() {
       showCancelButton: true,
     }).then(async (res) => {
       if (res.isConfirmed) {
-        await api.delete(`/users/${id}`);
-        fetchData();
+        try {
+          await api.delete(`/users/${id}`);
+          fetchData();
+
+          Swal.fire("Berhasil", "User dihapus", "success");
+        } catch (err) {
+          Swal.fire("Error", "Gagal hapus user", "error");
+        }
       }
     });
   };
@@ -81,7 +99,7 @@ export default function UserPage() {
 
       {/* TABLE */}
       <div className="bg-white rounded-xl shadow overflow-hidden">
-        <table className="w-full">
+        <table className="w-full text-center">
           <thead className="bg-green-800 text-white">
             <tr>
               <th className="p-3">No</th>
@@ -94,35 +112,28 @@ export default function UserPage() {
 
           <tbody>
             {filtered.map((item, i) => (
-              <tr
-                key={item.id}
-                className="text-center border-t hover:bg-gray-50"
-              >
+              <tr key={item.id} className="border-t hover:bg-gray-50">
                 <td>{i + 1}</td>
                 <td>{item.name}</td>
                 <td>{item.email}</td>
 
                 <td>
-                  <span className="px-3 py-1 rounded bg-gray-200 text-sm">
+                  <span className="px-3 py-1 rounded bg-gray-200 text-sm capitalize">
                     {item.role}
                   </span>
                 </td>
 
                 <td className="space-x-2">
-                  {/* ✏️ EDIT */}
                   <button
                     onClick={() => navigate(`/users/edit/${item.id}`)}
-                    className="bg-yellow-400 p-2 rounded hover:scale-110 transition"
-                    title="Edit"
+                    className="bg-yellow-400 p-2 rounded hover:scale-110"
                   >
                     <FaEdit />
                   </button>
 
-                  {/* 🗑 DELETE */}
                   <button
                     onClick={() => handleDelete(item.id)}
-                    className="bg-red-500 text-white p-2 rounded hover:scale-110 transition"
-                    title="Hapus"
+                    className="bg-red-500 text-white p-2 rounded hover:scale-110"
                   >
                     <FaTrash />
                   </button>

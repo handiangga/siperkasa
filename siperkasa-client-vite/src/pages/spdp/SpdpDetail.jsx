@@ -1,19 +1,29 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../services/api";
+import api from "../../services/api";
+import { ENDPOINT } from "../../constants/endpoint";
+
+import Loading from "../../components/common/Loading";
+import Empty from "../../components/common/Empty";
 
 export default function SpdpDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     try {
-      const res = await api.get(`/spdps/${id}`);
+      setLoading(true);
+
+      const res = await api.get(`${ENDPOINT.SPDP}/${id}`); // 🔥 FIX
       setData(res.data);
     } catch (err) {
       console.log(err);
+      setData(null);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -21,9 +31,17 @@ export default function SpdpDetail() {
     fetchData();
   }, []);
 
-  if (!data) return <p className="p-6">Loading...</p>;
+  if (loading) return <Loading />;
+  if (!data) return <Empty text="Data SPDP tidak ditemukan" />;
 
   const perkara = data.Perkara;
+
+  const getStatusColor = (status) => {
+    if (!status) return "bg-gray-100 text-gray-600";
+    if (status === "proses") return "bg-yellow-100 text-yellow-700";
+    if (status === "selesai") return "bg-green-100 text-green-700";
+    return "bg-gray-100 text-gray-600";
+  };
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -39,7 +57,7 @@ export default function SpdpDetail() {
         </button>
       </div>
 
-      {/* 🔥 INFO SPDP */}
+      {/* INFO */}
       <div className="bg-white p-6 rounded-xl shadow mb-6 space-y-2">
         <p>
           <b>Nomor:</b> {data.nomor_spdp}
@@ -58,7 +76,7 @@ export default function SpdpDetail() {
         </p>
       </div>
 
-      {/* 🔥 DATA PERKARA */}
+      {/* PERKARA */}
       <div className="bg-white rounded-xl shadow overflow-hidden">
         <h3 className="p-4 font-semibold text-green-800 border-b">
           Data Perkara
@@ -75,24 +93,26 @@ export default function SpdpDetail() {
           <tbody>
             {!perkara ? (
               <tr>
-                <td colSpan="2" className="p-4 text-center">
-                  Belum ada perkara
+                <td colSpan="2" className="p-6">
+                  <Empty text="Belum ada perkara" />
                 </td>
               </tr>
             ) : (
               <tr className="border-t">
-                {/* STATUS */}
                 <td>
-                  <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-medium">
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
+                      perkara.status,
+                    )}`}
+                  >
                     {perkara.status}
                   </span>
                 </td>
 
-                {/* AKSI */}
                 <td>
                   <button
                     onClick={() => navigate(`/p16/${perkara.id}`)}
-                    className="bg-blue-500 text-white px-3 py-1 rounded hover:scale-105 transition"
+                    className="bg-blue-500 text-white px-3 py-1 rounded hover:scale-105"
                   >
                     Lihat P16
                   </button>

@@ -1,33 +1,38 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
-import Login from "../pages/Login";
-import Dashboard from "../pages/Dashboard";
+import Login from "../pages/auth/Login";
+import DashboardRoutes from "./dashboardRoutes";
 
-import Layout from "../components/Layout";
-import ProtectedRoute from "../components/ProtectedRoute";
+import Layout from "../components/layout/Layout";
+import ProtectedRoute from "../components/layout/ProtectedRoute";
 
-import spdpRoutes from "./spdpRoutes";
-import jaksaRoutes from "./jaksaRoutes";
-import p16Routes from "./p16Routes";
+import ProfilePage from "../pages/profile/ProfilePage";
+import ChangePasswordPage from "../pages/profile/ChangePasswordPage";
 
-import userRoutes from "./userRoutes";
+import SpdpRoutes from "./spdpRoutes";
+import JaksaRoutes from "./jaksaRoutes";
+import P16Routes from "./p16Routes";
+import UserRoutes from "./userRoutes";
 
 export default function AppRoutes() {
   return (
     <Routes>
-      {/* LOGIN */}
       <Route path="/" element={<Login />} />
 
-      {/* PROTECTED */}
       <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<DashboardRoutes />} />
 
-          {/* MODULE */}
-          {spdpRoutes}
-          {jaksaRoutes}
-          {p16Routes}
-          {userRoutes}
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/change-password" element={<ChangePasswordPage />} />
+
+          {/* 🔥 BALIK KE SINI */}
+          {SpdpRoutes()}
+          {JaksaRoutes()}
+          {P16Routes()}
+          {UserRoutes()}
+
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Route>
       </Route>
     </Routes>

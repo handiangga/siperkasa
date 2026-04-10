@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import api from "../services/api";
+import api from "../../services/api";
 import Swal from "sweetalert2";
+import { ENDPOINT } from "../../constants/endpoint";
+
+import Loading from "../../components/common/Loading";
 
 export default function SpdpEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
 
   const [form, setForm] = useState({
     nomor_spdp: "",
@@ -20,17 +24,21 @@ export default function SpdpEdit() {
   // ================= FETCH =================
   const fetchData = async () => {
     try {
-      const res = await api.get(`/spdps/${id}`);
+      setFetching(true);
+
+      const res = await api.get(`${ENDPOINT.SPDP}/${id}`); // 🔥 FIX
 
       setForm({
         nomor_spdp: res.data.nomor_spdp || "",
         tanggal_spdp: res.data.tanggal_spdp?.split("T")[0] || "",
-        asal_instansi: res.data.asal_instansi || "", // 🔥 FIX
+        asal_instansi: res.data.asal_instansi || "",
         nama_tersangka: res.data.nama_tersangka || "",
         pasal: res.data.pasal || "",
       });
     } catch (err) {
       console.log(err);
+    } finally {
+      setFetching(false);
     }
   };
 
@@ -38,13 +46,12 @@ export default function SpdpEdit() {
     fetchData();
   }, []);
 
-  // ================= HANDLE INPUT =================
+  // ================= INPUT =================
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     let newValue = value;
 
-    // 🔥 AUTO UPPERCASE KHUSUS NAMA
     if (name === "nama_tersangka") {
       newValue = value.toUpperCase();
     }
@@ -59,7 +66,6 @@ export default function SpdpEdit() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 🔥 VALIDASI
     if (
       !form.nomor_spdp ||
       !form.tanggal_spdp ||
@@ -74,7 +80,7 @@ export default function SpdpEdit() {
     try {
       setLoading(true);
 
-      await api.put(`/spdps/${id}`, {
+      await api.put(`${ENDPOINT.SPDP}/${id}`, {
         nomor_spdp: form.nomor_spdp.trim(),
         tanggal_spdp: form.tanggal_spdp,
         asal_instansi: form.asal_instansi.trim(),
@@ -91,12 +97,13 @@ export default function SpdpEdit() {
       navigate("/spdp");
     } catch (err) {
       console.log(err);
-
       Swal.fire("Error", "Gagal update data", "error");
     } finally {
       setLoading(false);
     }
   };
+
+  if (fetching) return <Loading />;
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -112,82 +119,53 @@ export default function SpdpEdit() {
         </button>
       </div>
 
-      {/* CARD */}
+      {/* FORM */}
       <div className="bg-white p-8 rounded-2xl shadow-lg max-w-2xl">
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* NOMOR */}
-          <div>
-            <label className="block text-sm font-semibold mb-1">
-              Nomor SPDP
-            </label>
-            <input
-              type="text"
-              name="nomor_spdp"
-              value={form.nomor_spdp}
-              onChange={handleChange}
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-700 outline-none"
-            />
-          </div>
+          <input
+            name="nomor_spdp"
+            placeholder="Nomor SPDP"
+            value={form.nomor_spdp}
+            onChange={handleChange}
+            className="w-full p-3 border rounded-lg"
+          />
 
-          {/* TANGGAL */}
-          <div>
-            <label className="block text-sm font-semibold mb-1">
-              Tanggal SPDP
-            </label>
-            <input
-              type="date"
-              name="tanggal_spdp"
-              value={form.tanggal_spdp}
-              onChange={handleChange}
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-700 outline-none"
-            />
-          </div>
+          <input
+            type="date"
+            name="tanggal_spdp"
+            value={form.tanggal_spdp}
+            onChange={handleChange}
+            className="w-full p-3 border rounded-lg"
+          />
 
-          {/* 🔥 ASAL INSTANSI (WAJIB) */}
-          <div>
-            <label className="block text-sm font-semibold mb-1">
-              Asal Instansi
-            </label>
-            <input
-              type="text"
-              name="asal_instansi"
-              value={form.asal_instansi}
-              onChange={handleChange}
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-700 outline-none"
-            />
-          </div>
+          <input
+            name="asal_instansi"
+            placeholder="Asal Instansi"
+            value={form.asal_instansi}
+            onChange={handleChange}
+            className="w-full p-3 border rounded-lg"
+          />
 
-          {/* NAMA */}
-          <div>
-            <label className="block text-sm font-semibold mb-1">
-              Nama Tersangka
-            </label>
-            <input
-              type="text"
-              name="nama_tersangka"
-              value={form.nama_tersangka}
-              onChange={handleChange}
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-700 outline-none"
-            />
-          </div>
+          <input
+            name="nama_tersangka"
+            placeholder="Nama Tersangka"
+            value={form.nama_tersangka}
+            onChange={handleChange}
+            className="w-full p-3 border rounded-lg"
+          />
 
-          {/* PASAL */}
-          <div>
-            <label className="block text-sm font-semibold mb-1">Pasal</label>
-            <input
-              type="text"
-              name="pasal"
-              value={form.pasal}
-              onChange={handleChange}
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-700 outline-none"
-            />
-          </div>
+          <input
+            name="pasal"
+            placeholder="Pasal"
+            value={form.pasal}
+            onChange={handleChange}
+            className="w-full p-3 border rounded-lg"
+          />
 
-          {/* BUTTON */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-green-800 text-white py-3 rounded-lg hover:bg-green-900 transition font-semibold disabled:opacity-50"
+            className="w-full bg-green-800 text-white py-3 rounded-lg"
           >
             {loading ? "Menyimpan..." : "Simpan Perubahan"}
           </button>

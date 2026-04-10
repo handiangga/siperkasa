@@ -1,8 +1,14 @@
 // routes/notif.js
 const router = require("express").Router();
 const NotifController = require("../controllers/notifController");
-const { authentication } = require("../middlewares/auth");
+const { authentication, authorization } = require("../middlewares/auth");
 
-router.get("/", authentication, NotifController.getNotif);
+// 🔥 notif untuk semua role login
+router.get(
+  "/",
+  authentication,
+  authorization("admin", "kajari", "operator", "jaksa"),
+  NotifController.getNotif,
+);
 
 module.exports = router;

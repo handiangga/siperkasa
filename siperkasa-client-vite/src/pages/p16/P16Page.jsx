@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
-import api from "../services/api";
+import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEdit } from "react-icons/fa";
-import useAuth from "../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
+import { ENDPOINT } from "../../constants/endpoint";
+
+import Loading from "../../components/common/Loading";
+import Empty from "../../components/common/Empty";
 
 export default function P16Page() {
   const navigate = useNavigate();
@@ -14,13 +18,20 @@ export default function P16Page() {
   const [page, setPage] = useState(1);
   const limit = 10;
 
+  const [loading, setLoading] = useState(true);
+
   // 🔥 FETCH DATA
   const fetchData = async () => {
     try {
-      const res = await api.get("/perkaras");
-      setData(res.data.data || []);
+      setLoading(true);
+
+      const res = await api.get(ENDPOINT.PERKARA); // 🔥 FIX
+      setData(res.data.data || res.data || []);
     } catch (err) {
       console.log(err);
+      setData([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -30,27 +41,29 @@ export default function P16Page() {
 
   // 🔍 FILTER
   const filtered = data.filter((item) =>
-    `${item.Spdp?.nomor_spdp} ${item.Spdp?.nama_tersangka} ${item.Spdp?.pasal} ${item.status}`
+    `${item.Spdp?.nomor_spdp || ""} ${item.Spdp?.nama_tersangka || ""} ${item.Spdp?.pasal || ""} ${item.status || ""}`
       .toLowerCase()
       .includes(search.toLowerCase()),
   );
 
   // 🔥 PAGINATION
   const totalPages = Math.ceil(filtered.length / limit);
-
   const paginatedData = filtered.slice((page - 1) * limit, page * limit);
 
-  // 🔁 RESET PAGE SAAT SEARCH
   useEffect(() => {
     setPage(1);
   }, [search]);
 
-  // 🔥 AMBIL JAKSA UTAMA
+  // 🔥 JAKSA UTAMA
   const getJaksaUtama = (assignments) => {
     if (!assignments) return "-";
     const utama = assignments.find((j) => j.peran === "utama");
     return utama?.Jaksa?.nama || "-";
   };
+
+  if (loading) return <Loading />;
+
+  if (!data.length) return <Empty text="Belum ada data P16" />;
 
   return (
     <div>
@@ -95,68 +108,66 @@ export default function P16Page() {
           </thead>
 
           <tbody>
-            {paginatedData.length === 0 ? (
-              <tr>
-                <td colSpan="7" className="p-6 text-gray-500">
-                  Tidak ada data
+            {paginatedData.map((item, i) => (
+              <tr key={item.id} className="border-t hover:bg-gray-50">
+                <td className="p-3">{(page - 1) * limit + i + 1}</td>
+
+                <td className="px-3 py-2 text-sm break-words">
+                  {item.Spdp?.nomor_spdp}
+                </td>
+
+                <td className="px-3 py-2 text-sm break-words">
+                  {item.Spdp?.nama_tersangka}
+                </td>
+
+                <td className="px-3 py-2 text-sm break-words">
+                  {item.Spdp?.pasal}
+                </td>
+
+                <td className="text-sm">
+                  {getJaksaUtama(item.P16Assignments)}
+                </td>
+
+                <td>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs
+                    ${
+                      item.status === "proses"
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-green-100 text-green-700"
+                    }`}
+                  >
+                    {item.status}
+                  </span>
+                </td>
+
+                <td>
+                  <div className="flex justify-center gap-2">
+                    <button
+                      onClick={() => navigate(`/p16/${item.id}`)}
+                      className="bg-blue-500 text-white p-2 rounded hover:scale-110 transition"
+                    >
+                      <FaEye />
+                    </button>
+
+                    {(isAdmin || isOperator) && (
+                      <button
+                        onClick={() => navigate(`/p16/edit/${item.id}`)}
+                        className="bg-yellow-400 p-2 rounded hover:scale-110 transition"
+                      >
+                        <FaEdit />
+                      </button>
+                    )}
+                  </div>
                 </td>
               </tr>
-            ) : (
-              paginatedData.map((item, i) => (
-                <tr key={item.id} className="border-t hover:bg-gray-50">
-                  <td className="p-3">{(page - 1) * limit + i + 1}</td>
-
-                  <td className="px-3 py-2 text-sm break-words">
-                    {item.Spdp?.nomor_spdp}
-                  </td>
-
-                  <td className="px-3 py-2 text-sm break-words">
-                    {item.Spdp?.nama_tersangka}
-                  </td>
-
-                  <td className="px-3 py-2 text-sm break-words">
-                    {item.Spdp?.pasal}
-                  </td>
-
-                  <td className="text-sm">
-                    {getJaksaUtama(item.P16Assignments)}
-                  </td>
-
-                  <td>
-                    <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs">
-                      {item.status}
-                    </span>
-                  </td>
-
-                  <td>
-                    <div className="flex justify-center gap-2">
-                      <button
-                        onClick={() => navigate(`/p16/${item.id}`)}
-                        className="bg-blue-500 text-white p-2 rounded hover:scale-110 transition"
-                      >
-                        <FaEye />
-                      </button>
-
-                      {(isAdmin || isOperator) && (
-                        <button
-                          onClick={() => navigate(`/p16/edit/${item.id}`)}
-                          className="bg-yellow-400 p-2 rounded hover:scale-110 transition"
-                        >
-                          <FaEdit />
-                        </button>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
+            ))}
           </tbody>
         </table>
       </div>
 
       {/* PAGINATION */}
       <div className="flex justify-center mt-6 gap-2 flex-wrap">
-        {/* PREV */}
         <button
           disabled={page === 1}
           onClick={() => setPage(page - 1)}
@@ -165,7 +176,6 @@ export default function P16Page() {
           Prev
         </button>
 
-        {/* ANGKA */}
         {[...Array(totalPages)].map((_, i) => {
           const pageNumber = i + 1;
 
@@ -182,7 +192,6 @@ export default function P16Page() {
           );
         })}
 
-        {/* NEXT */}
         <button
           disabled={page === totalPages}
           onClick={() => setPage(page + 1)}

@@ -9,10 +9,11 @@ const spdpRoutes = require("./spdp");
 const dashboardRoutes = require("./dashboard");
 const notifRoutes = require("./notif");
 
+// 🔥 ROUTES
 router.use("/users", userRoutes);
-router.use("/spdps", spdpRoutes);
-router.use("/perkaras", perkaraRoutes);
-router.use("/jaksas", jaksaRoutes);
+router.use("/spdp", spdpRoutes); // konsisten singular
+router.use("/perkara", perkaraRoutes); // konsisten singular
+router.use("/jaksa", jaksaRoutes); // konsisten singular
 router.use("/p16", p16Routes);
 router.use("/dashboard", dashboardRoutes);
 router.use("/notif", notifRoutes);

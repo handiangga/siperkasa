@@ -1,4 +1,6 @@
 export default function Tooltip({ text, children }) {
+  if (!text) return children;
+
   return (
     <div className="relative group inline-block">
       {children}
@@ -9,7 +11,7 @@ export default function Tooltip({ text, children }) {
         bg-black text-white text-xs px-2 py-1 rounded
         opacity-0 group-hover:opacity-100
         transition duration-200 whitespace-nowrap
-        pointer-events-none
+        pointer-events-none z-50
       "
       >
         {text}

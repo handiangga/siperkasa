@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import api from "../services/api";
+import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 
 import {
   Chart as ChartJS,
@@ -64,8 +64,8 @@ export default function Dashboard() {
 
   const fetchData = async () => {
     try {
-      const spdpRes = await api.get("/spdps");
-      const perkaraRes = await api.get("/perkaras");
+      const spdpRes = await api.get("/spdp");
+      const perkaraRes = await api.get("/perkara");
 
       // 🔥 ROLE: beda endpoint
       const p16Res =

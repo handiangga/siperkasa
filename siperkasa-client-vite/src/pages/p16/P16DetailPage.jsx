@@ -1,19 +1,29 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../services/api";
+import api from "../../services/api";
+import { ENDPOINT } from "../../constants/endpoint";
+
+import Loading from "../../components/common/Loading";
+import Empty from "../../components/common/Empty";
 
 export default function P16DetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     try {
-      const res = await api.get(`/p16/perkara/${id}`);
-      setData(res.data);
+      setLoading(true);
+
+      const res = await api.get(`/p16/perkara/${id}`); // endpoint tetap
+      setData(res.data || []);
     } catch (err) {
       console.log(err);
+      setData([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -21,9 +31,9 @@ export default function P16DetailPage() {
     fetchData();
   }, []);
 
-  if (!data) return <div className="p-6">Loading...</div>;
+  if (loading) return <Loading />;
 
-  if (data.length === 0) {
+  if (!data.length) {
     return (
       <div className="p-6">
         <h2 className="text-2xl font-bold text-green-800 mb-4">Detail P16</h2>
@@ -42,11 +52,11 @@ export default function P16DetailPage() {
     );
   }
 
-  // 🔥 ambil data dasar
+  // 🔥 DATA
   const perkara = data[0]?.Perkara;
   const spdp = perkara?.Spdp;
 
-  // 🔥 pisahin jaksa
+  // 🔥 JAKSA
   const jaksaUtama = data.find((j) => j.peran === "utama");
   const jaksaAnggota = data.filter((j) => j.peran === "anggota");
 
@@ -89,7 +99,7 @@ export default function P16DetailPage() {
             {jaksaUtama.Jaksa?.nama}
           </div>
         ) : (
-          <p>-</p>
+          <Empty text="Belum ada jaksa utama" />
         )}
       </div>
 
@@ -98,7 +108,7 @@ export default function P16DetailPage() {
         <h3 className="font-bold mb-3 text-green-800">Jaksa Anggota</h3>
 
         {jaksaAnggota.length === 0 ? (
-          <p>-</p>
+          <Empty text="Belum ada jaksa anggota" />
         ) : (
           <ul className="space-y-2">
             {jaksaAnggota.map((j) => (

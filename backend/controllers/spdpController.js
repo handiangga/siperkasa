@@ -47,14 +47,23 @@ class SpdpController {
     try {
       const { id } = req.params;
 
+      const { Spdp, Perkara, P16Assignment, Jaksa } = require("../models");
+
       const data = await Spdp.findByPk(id, {
         include: [
           {
-            model: require("../models").Perkara,
+            model: Perkara,
+            as: "Perkara", // ✅ WAJIB (sesuai model kamu)
             include: [
               {
-                model: require("../models").P16Assignment,
-                include: ["Jaksa"],
+                model: P16Assignment,
+                as: "P16Assignments", // ⚠️ cek ini di model perkara kamu
+                include: [
+                  {
+                    model: Jaksa,
+                    as: "Jaksa", // ⚠️ cek ini di model P16Assignment
+                  },
+                ],
               },
             ],
           },

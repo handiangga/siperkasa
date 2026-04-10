@@ -18,7 +18,7 @@ export default function IconButton({
       <button
         onClick={onClick}
         className={`
-          ${colors[color]}
+          ${colors[color] || colors.green}
           text-white
           p-2
           rounded-lg
@@ -29,7 +29,7 @@ export default function IconButton({
           active:scale-95
         `}
       >
-        <Icon size={16} />
+        {Icon ? <Icon size={16} /> : null}
       </button>
     </Tooltip>
   );

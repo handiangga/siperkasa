@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../services/api";
+import api from "../../services/api";
+import { ENDPOINT } from "../../constants/endpoint";
+
+import Loading from "../../components/common/Loading";
+import Empty from "../../components/common/Empty";
 
 export default function JaksaDetail() {
   const { id } = useParams();
@@ -8,9 +12,8 @@ export default function JaksaDetail() {
 
   const [jaksa, setJaksa] = useState({});
   const [perkara, setPerkara] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // 🔍 SEARCH & SORT
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("latest");
 
@@ -22,39 +25,37 @@ export default function JaksaDetail() {
     try {
       setLoading(true);
 
-      const resJaksa = await api.get(`/jaksas/${id}`);
-      setJaksa(resJaksa.data);
+      const [resJaksa, resPerkara] = await Promise.all([
+        api.get(`${ENDPOINT.JAKSA}/${id}`),
+        api.get(`${ENDPOINT.P16}/jaksa/${id}`),
+      ]);
 
-      const resPerkara = await api.get(`/p16/jaksa/${id}`);
-      setPerkara(resPerkara.data);
+      setJaksa(resJaksa.data || {});
+      setPerkara(resPerkara.data || []);
     } catch (err) {
       console.log(err);
+      setPerkara([]);
     } finally {
       setLoading(false);
     }
   };
 
-  // 🔥 STATUS COLOR
   const getStatusColor = (status) => {
     if (!status) return "bg-gray-100 text-gray-600";
-    if (status === "penyidikan") return "bg-yellow-100 text-yellow-700";
-    if (status === "penuntutan") return "bg-blue-100 text-blue-700";
+    if (status === "proses") return "bg-yellow-100 text-yellow-700";
     if (status === "selesai") return "bg-green-100 text-green-700";
     return "bg-gray-100 text-gray-600";
   };
 
-  // 🔥 FILTER
-  const filterData = (items) => {
-    return items.filter((item) =>
-      `${item.Perkara?.Spdp?.nomor_spdp} 
-       ${item.Perkara?.Spdp?.nama_tersangka} 
-       ${item.Perkara?.Spdp?.pasal}`
+  const filterData = (items) =>
+    items.filter((item) =>
+      `${item.Perkara?.Spdp?.nomor_spdp || ""} 
+       ${item.Perkara?.Spdp?.nama_tersangka || ""} 
+       ${item.Perkara?.Spdp?.pasal || ""}`
         .toLowerCase()
         .includes(search.toLowerCase()),
     );
-  };
 
-  // 🔥 SORT
   const sortData = (items) => {
     if (sort === "name") {
       return [...items].sort((a, b) =>
@@ -73,11 +74,9 @@ export default function JaksaDetail() {
     return items;
   };
 
-  // 🔥 SPLIT DATA
   const utama = perkara.filter((p) => p.peran === "utama");
   const anggota = perkara.filter((p) => p.peran !== "utama");
 
-  // 🔥 TABLE COMPONENT
   const renderTable = (title, items, color = "green") => {
     const finalData = sortData(filterData(items));
 
@@ -109,13 +108,13 @@ export default function JaksaDetail() {
           <tbody>
             {finalData.length === 0 ? (
               <tr>
-                <td colSpan="5" className="p-6 text-gray-500">
-                  Tidak ada data
+                <td colSpan="5" className="p-6">
+                  <Empty text="Tidak ada data" />
                 </td>
               </tr>
             ) : (
               finalData.map((item, i) => {
-                const status = item.Perkara?.status?.toLowerCase();
+                const status = item.Perkara?.status;
 
                 return (
                   <tr
@@ -156,7 +155,8 @@ export default function JaksaDetail() {
     );
   };
 
-  if (loading) return <p className="p-6">Loading...</p>;
+  if (loading) return <Loading />;
+  if (!jaksa.id) return <Empty text="Data jaksa tidak ditemukan" />;
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -188,7 +188,6 @@ export default function JaksaDetail() {
           <div>{jaksa.pangkat || "-"}</div>
         </div>
 
-        {/* TOTAL */}
         <div className="grid grid-cols-2 gap-4 mt-6">
           <div className="bg-green-50 border p-4 rounded-xl text-center">
             <p className="text-sm text-gray-500">P16 Utama</p>

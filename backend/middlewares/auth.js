@@ -1,19 +1,26 @@
 const { User, P16Assignment } = require("../models");
 const { jwtVerify } = require("../helpers/jwt");
 
+// =========================
 // 🔐 AUTHENTICATION
+// =========================
 async function authentication(req, res, next) {
   try {
-    const { access_token } = req.headers;
+    let token = req.headers.authorization;
 
-    if (!access_token) {
+    if (!token) {
       throw {
         name: "Unauthorized",
         message: "You must login first",
       };
     }
 
-    const payload = jwtVerify(access_token);
+    // 🔥 support Bearer token
+    if (token.startsWith("Bearer ")) {
+      token = token.split(" ")[1];
+    }
+
+    const payload = jwtVerify(token);
 
     const user = await User.findByPk(payload.id);
 
@@ -38,30 +45,34 @@ async function authentication(req, res, next) {
   }
 }
 
-// 🔥 ROLE FLEXIBLE
-function hasRole(roles) {
+// =========================
+// 🔥 AUTHORIZATION ROLE
+// =========================
+function authorization(...allowedRoles) {
   return (req, res, next) => {
-    if (roles.includes(req.user.role)) {
-      next();
-    } else {
-      next({
+    if (!allowedRoles.includes(req.user.role)) {
+      return next({
         name: "Forbidden",
         message: "Tidak punya akses",
       });
     }
+    next();
   };
 }
 
+// =========================
 // 🔥 AUTHORIZATION PERKARA
+// =========================
 async function authorizationPerkara(req, res, next) {
   try {
     const { perkara_id } = req.params;
 
-    // admin & kajari bebas akses
-    if (req.user.role === "admin" || req.user.role === "kajari") {
+    // 🔥 admin, kajari, operator bebas
+    if (["admin", "kajari", "operator"].includes(req.user.role)) {
       return next();
     }
 
+    // 🔥 jaksa hanya punya dia
     const data = await P16Assignment.findOne({
       where: {
         perkara_id,
@@ -84,6 +95,6 @@ async function authorizationPerkara(req, res, next) {
 
 module.exports = {
   authentication,
-  hasRole,
+  authorization,
   authorizationPerkara,
 };
