@@ -11,7 +11,7 @@
     "sequelize": "^6.37.8"
   },
   "devDependencies": {
-    "dotenv": "^17.4.0",
+    "dotenv": "^17.4.1",
     "sequelize-cli": "^6.6.5"
   },
   "name": "server",
