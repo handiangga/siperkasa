@@ -1,0 +1,219 @@
+{
+"Jaksas": [
+	{
+		"id" : 52,
+		"nama" : "Bagas Pradikta Haryanto, S.H.",
+		"nip" : "199201182018011001",
+		"jabatan" : "Ajun Jaksa",
+		"pangkat" : "III\/b",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 53,
+		"nama" : "Adinda Hapsari, S.H.",
+		"nip" : "199610222020122032",
+		"jabatan" : "Ajun Jaksa",
+		"pangkat" : "III\/b",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 54,
+		"nama" : "Fahma Asmoro Maharsi, S.H.",
+		"nip" : "199312242020122018",
+		"jabatan" : "Ajun Jaksa",
+		"pangkat" : "III\/b",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 55,
+		"nama" : "Rahajeng Dinar Hanggarjani, S.H., M.H.",
+		"nip" : "198611042014032001",
+		"jabatan" : "Jaksa Pratama",
+		"pangkat" : "III\/c",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 56,
+		"nama" : "Nisa Osalia Manah, S.H.",
+		"nip" : "198812262014032001",
+		"jabatan" : "Jaksa Pratama",
+		"pangkat" : "III\/c",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 57,
+		"nama" : "Hanifah, S.H.",
+		"nip" : "197901202005012003",
+		"jabatan" : "Jaksa Muda",
+		"pangkat" : "III\/d",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 58,
+		"nama" : "Kusuma Eka Mahendra R., S.H., M.H.",
+		"nip" : "198511272008121001",
+		"jabatan" : "Jaksa Muda",
+		"pangkat" : "III\/d",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 59,
+		"nama" : "Shanty Elda Mayasari, S.H.",
+		"nip" : "198405202008122002",
+		"jabatan" : "Jaksa Muda",
+		"pangkat" : "III\/d",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 60,
+		"nama" : "Rina Wisata, S.H.",
+		"nip" : "198708192009122004",
+		"jabatan" : "Jaksa Muda",
+		"pangkat" : "III\/d",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 61,
+		"nama" : "Wiwik Triatmini, S.H., M.Hum.",
+		"nip" : "197303161994032001",
+		"jabatan" : "Jaksa Madya",
+		"pangkat" : "IV\/a",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 62,
+		"nama" : "Basaria Marpaung, S.H.",
+		"nip" : "197207121996032001",
+		"jabatan" : "Jaksa Madya",
+		"pangkat" : "IV\/a",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 63,
+		"nama" : "Erlin Yuliastuti, S.H., M.H.",
+		"nip" : "197807262002122002",
+		"jabatan" : "Jaksa Madya",
+		"pangkat" : "IV\/a",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 64,
+		"nama" : "Indriastuti Yustiningsih, S.H., M.H.",
+		"nip" : "197810172001122002",
+		"jabatan" : "Jaksa Madya",
+		"pangkat" : "IV\/a",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 65,
+		"nama" : "Hasti Winasih Novindari, S.H., M.H.",
+		"nip" : "197711162000032001",
+		"jabatan" : "Jaksa Madya",
+		"pangkat" : "IV\/a",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 66,
+		"nama" : "Hesti Tri Rejeki, S.H.",
+		"nip" : "198004072005012005",
+		"jabatan" : "Jaksa Madya",
+		"pangkat" : "IV\/a",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 67,
+		"nama" : "Euis Ratnawati, S.H., M.H.",
+		"nip" : "198106212005012009",
+		"jabatan" : "Jaksa Madya",
+		"pangkat" : "IV\/a",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 69,
+		"nama" : "Siti Murharjanti, S.H.",
+		"nip" : "197810242005012003",
+		"jabatan" : "Jaksa Madya",
+		"pangkat" : "IV\/a",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 70,
+		"nama" : "Bambang Prasetyo, S.H.",
+		"nip" : "198308082007031001",
+		"jabatan" : "Jaksa Madya",
+		"pangkat" : "IV\/a",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 71,
+		"nama" : "Rachma Aryani Tuasikal, S.H.",
+		"nip" : "198512052008122002",
+		"jabatan" : "Jaksa Madya",
+		"pangkat" : "IV\/a",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 72,
+		"nama" : "Evita Christin Pranatasari, S.H.",
+		"nip" : "198512232008122001",
+		"jabatan" : "Jaksa Madya",
+		"pangkat" : "IV\/a",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 73,
+		"nama" : "Erica Normasari, S.H.",
+		"nip" : "198410312008122001",
+		"jabatan" : "Jaksa Madya",
+		"pangkat" : "IV\/a",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 74,
+		"nama" : "Rindi Atmoko, S.H.",
+		"nip" : "198205072005011003",
+		"jabatan" : "Jaksa Madya",
+		"pangkat" : "IV\/a",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 75,
+		"nama" : "Suratiningsih, S.H., M.H.",
+		"nip" : "198212212006032001",
+		"jabatan" : "Jaksa Madya",
+		"pangkat" : "IV\/a",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-08T04:04:10.562Z"
+	},
+	{
+		"id" : 68,
+		"nama" : "Meilinda Margaretha H.N., S.H., M.HLi.",
+		"nip" : "197905052005012018",
+		"jabatan" : "Jaksa Madya",
+		"pangkat" : "IV\/a",
+		"createdAt" : "2026-04-08T04:04:10.562Z",
+		"updatedAt" : "2026-04-10T11:20:40.896Z"
+	}
+]}

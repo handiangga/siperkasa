@@ -1,0 +1,201 @@
+{
+"Spdps": [
+	{
+		"id" : 6,
+		"nomor_spdp" : "SPDP\/02\/III\/RES.1.6.\/2026\/Reskrim",
+		"tanggal_spdp" : "2026-04-01T00:00:00.000Z",
+		"asal_instansi" : "KAPOLSEK SEYEGAN",
+		"nama_tersangka" : "REHANDIKA PUTRA FADYAN ALS REHAN BIN FARID TRI CAHYONO",
+		"pasal" : "ndang-Undang No. 1 Tahun 2023 Pasal 262 KUHP atau Pasal 466 Ayat (2)",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T05:05:08.958Z",
+		"updatedAt" : "2026-04-08T05:05:08.958Z"
+	},
+	{
+		"id" : 7,
+		"nomor_spdp" : "B\/SPDP\/21\/III\/2026\/SATRESNARKOBA",
+		"tanggal_spdp" : "2026-04-01T00:00:00.000Z",
+		"asal_instansi" : "KAPOLRESTA SLEMAN , KASARESNARKOBA",
+		"nama_tersangka" : "GERALDO BIN SUGIANTORO",
+		"pasal" : " PSL. 62 UU RI NO 05 TAHUN 1997 Tentang Psikopropika ",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T05:08:15.952Z",
+		"updatedAt" : "2026-04-08T05:08:15.952Z"
+	},
+	{
+		"id" : 8,
+		"nomor_spdp" : "B\/SPDP\/58\/IV\/RES.1.24\/2026\/SATRESKRIM",
+		"tanggal_spdp" : "2026-04-02T00:00:00.000Z",
+		"asal_instansi" : "KAPOLRESTA SLEMAN, PS KASAT RESKRIM",
+		"nama_tersangka" : "TERLAPOR CHORY WIDJAYA , PELAPOR VIORETY",
+		"pasal" : "PSL. 418 ayat (1) UU no 1 tahun 2023 tentang KUHP atau Pasal 6 huruf C Jo Pasal 15 ayat (1) huruf A dan G UU Nomor 12 tahun 2022 tentang TPKS Jo Lampiran I Tahun 2026 tentang penyesuaian pidana",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T05:10:34.462Z",
+		"updatedAt" : "2026-04-08T06:06:46.139Z"
+	},
+	{
+		"id" : 9,
+		"nomor_spdp" : "B\/SPDP\/24\/IV\/2026\/SATRESNARKOBA",
+		"tanggal_spdp" : "2026-04-06T00:00:00.000Z",
+		"asal_instansi" : "KEPALA KEPOLISIAN RESOR KOTA SLEMAN",
+		"nama_tersangka" : "NASARITO PRAMUDYA PASAI BIN SUHARDO ",
+		"pasal" : "Pasal 609 ayat (2) huruf a UU RI No. 1 Tahun 2023 tentang KUHP jo Pasal 609 ayat (2) huruf a UU RI No. 1 Tahun 2026 tentang Penyesuaian Pidana, dan\/atau Pasal 114 ayat (2), Pasal 132 ayat (1), Pasal 127 ayat (1) huruf a UU RI No. 35 Tahun 2009 tentang Narkotika, jo Lampiran II Pasal 114 ayat (2) UU RI No. 1 Tahun 2026 tentang Penyesuaian Pidana jo Permenkes Nomor 15 Tahun 2025 tentang Penggolongan Narkotika",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T07:02:11.689Z",
+		"updatedAt" : "2026-04-08T07:02:11.689Z"
+	},
+	{
+		"id" : 10,
+		"nomor_spdp" : "B\/S-1.3\/22\/IV\/2026\/Satresnarkoba\/Polresta Sleman",
+		"tanggal_spdp" : "2026-04-01T00:00:00.000Z",
+		"asal_instansi" : "KAPOLRES KOTA SLEMAN",
+		"nama_tersangka" : "ANTONIUS BUDI ANTORO ALIAS IYUS ANAK DARI JUNIAWAN",
+		"pasal" : "Pasal 435 dan\/atau Pasal 436 UU RI Nomor 17 Tahun 2023 tentang Kesehatan jo Lampiran I Pasal 435 dan\/atau Pasal 436 Undang-Undang RI Nomor 1 Tahun 2026 tentang Penyesuaian Pidana",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T07:03:37.939Z",
+		"updatedAt" : "2026-04-08T07:03:37.939Z"
+	},
+	{
+		"id" : 12,
+		"nomor_spdp" : "B\/SPDP\/26\/IV\/2026\/SATRESNARKOBA\/POLRESTA SLEMAN",
+		"tanggal_spdp" : "2026-04-04T00:00:00.000Z",
+		"asal_instansi" : "KAPOLRESTA SLEMAN , KASATRESNARKOBA",
+		"nama_tersangka" : "DAVID CHANDRA SETYAWAN BIN BASUKI (ALM)",
+		"pasal" : "PSL. 114 (1) , PASAL 111 (1) UU NO 1 TAHUN 2026 ",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T07:06:34.019Z",
+		"updatedAt" : "2026-04-08T07:06:34.019Z"
+	},
+	{
+		"id" : 11,
+		"nomor_spdp" : "B\/S-1.3\/27\/IV\/2026\/SATRESNARKOBA",
+		"tanggal_spdp" : "2026-04-06T00:00:00.000Z",
+		"asal_instansi" : "KAPOLRESTA SLEMAN , KASATRESNARKOBA",
+		"nama_tersangka" : "DENNY KUSUMA WIJAYA ALIAS DENNY BIN WIDONO (ALM)",
+		"pasal" : "PSL. 609 AYAT 1 a UU RI No 1 Tahun 2023 tentang KUHP Jo lampiran 1 pasal 609 ayat (1) huruf A uu ri nO 1 Tahun 2026",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T07:05:38.045Z",
+		"updatedAt" : "2026-04-08T07:06:49.988Z"
+	},
+	{
+		"id" : 13,
+		"nomor_spdp" : "SPDP\/03\/IV\/RES.1.8\/2026\/RESKRIM",
+		"tanggal_spdp" : "2026-04-06T00:00:00.000Z",
+		"asal_instansi" : "KAPOLSEK SEYEGAN",
+		"nama_tersangka" : "MUHAMMAD IKHSAN DANUARY ALS KUNCUNG BIN RANU , DKK",
+		"pasal" : " PSL, 479 AYAT 1 KUHP ",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T08:33:40.832Z",
+		"updatedAt" : "2026-04-08T08:33:40.832Z"
+	},
+	{
+		"id" : 14,
+		"nomor_spdp" : "SPDP\/ 08\/IV\/RES.1.6\/2026\/SEK DPB",
+		"tanggal_spdp" : "2026-06-07T00:00:00.000Z",
+		"asal_instansi" : "KAPOLSEK DEPOK BARAT",
+		"nama_tersangka" : "ACHO GABRIEL KINGHO ANAK DARI JHONY YULIUS KINGHO DKK",
+		"pasal" : "PSL. 466 AYAT 3 JO PSL 20 AYAT 1 UU NO 1 TAHUN 2023",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T08:36:55.845Z",
+		"updatedAt" : "2026-04-08T08:36:55.845Z"
+	},
+	{
+		"id" : 15,
+		"nomor_spdp" : "SPDP\/59\/IV\/RES.1.24\/2026\/Satreskrim",
+		"tanggal_spdp" : "2026-04-01T00:00:00.000Z",
+		"asal_instansi" : "KAPOLRESTA SLEMAN",
+		"nama_tersangka" : " Dalam Lidik",
+		"pasal" : "pasal 27 ayat 3",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T08:38:02.995Z",
+		"updatedAt" : "2026-04-08T08:38:02.995Z"
+	},
+	{
+		"id" : 16,
+		"nomor_spdp" : "B\/SPDP\/25\/IV\/2026\/Satresnarkoba",
+		"tanggal_spdp" : "2026-04-06T00:00:00.000Z",
+		"asal_instansi" : "KAPOLRESTA SLEMAN",
+		"nama_tersangka" : "DHIMAS RYAN ARDIANSYAH Bin FERRY ANTARA",
+		"pasal" : "pasal 609 ayat 1",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T08:39:02.051Z",
+		"updatedAt" : "2026-04-08T08:39:02.051Z"
+	},
+	{
+		"id" : 17,
+		"nomor_spdp" : "B\/SPDP\/23\/IV\/2026\/Satresnarkoba",
+		"tanggal_spdp" : "2026-04-07T00:00:00.000Z",
+		"asal_instansi" : "KEPALA KEPOLISIAN RESOR KOTA SLEMAN",
+		"nama_tersangka" : "TSK AFIT ISTACHORI BIN ADDY MUACHOR",
+		"pasal" : "pasal 609 ayat 1",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T08:40:07.513Z",
+		"updatedAt" : "2026-04-08T08:40:07.513Z"
+	},
+	{
+		"id" : 18,
+		"nomor_spdp" : "SPDP\/9\/IV\/RES.1.8\/2026\/Sek DPB",
+		"tanggal_spdp" : "2026-04-06T00:00:00.000Z",
+		"asal_instansi" : "KAPOLSEK DEPOK BARAT",
+		"nama_tersangka" : "RAHMA DANI Bin RUSMAN",
+		"pasal" : "pasal 476 undang undang no 1 tahun 2023 tentang KUHP",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T08:42:46.544Z",
+		"updatedAt" : "2026-04-08T08:42:46.544Z"
+	},
+	{
+		"id" : 19,
+		"nomor_spdp" : "B\/SPDP\/61\/IV\/RES.1.11\/2026\/Satreskrim",
+		"tanggal_spdp" : "2026-04-06T00:00:00.000Z",
+		"asal_instansi" : "KAPOLRESTA SLEMAN\/KASATRESKRIM",
+		"nama_tersangka" : "Dalam Lidik",
+		"pasal" : "pasal 378 atau 372 KUH pidana",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T08:43:54.683Z",
+		"updatedAt" : "2026-04-08T08:43:54.683Z"
+	},
+	{
+		"id" : 20,
+		"nomor_spdp" : "B\/SPDP\/62\/IV\/RES.1.11\/2026\/Satreskrim",
+		"tanggal_spdp" : "2026-04-06T00:00:00.000Z",
+		"asal_instansi" : "KAPOLRESTA SLEMAN\/POLDA DIY",
+		"nama_tersangka" : "Dalam Lidik",
+		"pasal" : "pasal 378 atau 372 KUH pidana",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T08:45:01.729Z",
+		"updatedAt" : "2026-04-08T08:45:01.729Z"
+	},
+	{
+		"id" : 21,
+		"nomor_spdp" : "SPDP\/03\/IV\/RES.1.8\/2026\/UNIT RESKRIM\/POLSEK TURI",
+		"tanggal_spdp" : "2026-04-08T00:00:00.000Z",
+		"asal_instansi" : "KAPOLSEK TURI",
+		"nama_tersangka" : " PRADISTA DWI PRAMUDIA BIN SARJONO (ALM)",
+		"pasal" : "PSL. 477 UU NO 1 TAHUN 2023",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T08:45:52.170Z",
+		"updatedAt" : "2026-04-08T08:45:52.170Z"
+	},
+	{
+		"id" : 22,
+		"nomor_spdp" : "B\/SPDP\/ 64\/IV\/RES.1.11\/2026\/SATRESKRIM",
+		"tanggal_spdp" : "2026-04-08T00:00:00.000Z",
+		"asal_instansi" : "KAPOLRESTA SLEMAN , KASAT RESKRIM",
+		"nama_tersangka" : " AN LYNDA SEKAR PRAVITANINGRUM ALIAS LYNDA BINTI BUDIYANTO",
+		"pasal" : "PSL. 492 ATAU 486 UU NO 1 TAHUN 2023",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T08:46:34.418Z",
+		"updatedAt" : "2026-04-08T08:46:34.418Z"
+	},
+	{
+		"id" : 5,
+		"nomor_spdp" : "SPDP\/03\/III\/RES.1.11\/2026\/SEK PRB",
+		"tanggal_spdp" : "2026-04-01T00:00:00.000Z",
+		"asal_instansi" : "KAPOLSEK PRAMBANAN",
+		"nama_tersangka" : "DALAM LIDIK, PELAPOR AN INDRIYANI",
+		"pasal" : "PSL. 492 UU Nomor 01 tahun 2023",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T05:03:19.980Z",
+		"updatedAt" : "2026-04-10T02:27:45.994Z"
+	}
+]}

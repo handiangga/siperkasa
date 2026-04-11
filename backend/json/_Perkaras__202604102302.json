@@ -1,0 +1,147 @@
+{
+"Perkaras": [
+	{
+		"id" : 4,
+		"spdp_id" : 5,
+		"status" : "penyidikan",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T05:03:19.998Z",
+		"updatedAt" : "2026-04-08T05:03:19.998Z"
+	},
+	{
+		"id" : 5,
+		"spdp_id" : 6,
+		"status" : "penyidikan",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T05:05:08.973Z",
+		"updatedAt" : "2026-04-08T05:05:08.973Z"
+	},
+	{
+		"id" : 6,
+		"spdp_id" : 7,
+		"status" : "penyidikan",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T05:08:15.959Z",
+		"updatedAt" : "2026-04-08T05:08:15.959Z"
+	},
+	{
+		"id" : 7,
+		"spdp_id" : 8,
+		"status" : "penyidikan",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T05:10:34.465Z",
+		"updatedAt" : "2026-04-08T05:10:34.465Z"
+	},
+	{
+		"id" : 8,
+		"spdp_id" : 9,
+		"status" : "penyidikan",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T07:02:11.734Z",
+		"updatedAt" : "2026-04-08T07:02:11.734Z"
+	},
+	{
+		"id" : 9,
+		"spdp_id" : 10,
+		"status" : "penyidikan",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T07:03:37.959Z",
+		"updatedAt" : "2026-04-08T07:03:37.959Z"
+	},
+	{
+		"id" : 10,
+		"spdp_id" : 11,
+		"status" : "penyidikan",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T07:05:38.049Z",
+		"updatedAt" : "2026-04-08T07:05:38.049Z"
+	},
+	{
+		"id" : 11,
+		"spdp_id" : 12,
+		"status" : "penyidikan",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T07:06:34.027Z",
+		"updatedAt" : "2026-04-08T07:06:34.027Z"
+	},
+	{
+		"id" : 12,
+		"spdp_id" : 13,
+		"status" : "penyidikan",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T08:33:40.914Z",
+		"updatedAt" : "2026-04-08T08:33:40.914Z"
+	},
+	{
+		"id" : 13,
+		"spdp_id" : 14,
+		"status" : "penyidikan",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T08:36:55.859Z",
+		"updatedAt" : "2026-04-08T08:36:55.859Z"
+	},
+	{
+		"id" : 14,
+		"spdp_id" : 15,
+		"status" : "penyidikan",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T08:38:03.017Z",
+		"updatedAt" : "2026-04-08T08:38:03.017Z"
+	},
+	{
+		"id" : 15,
+		"spdp_id" : 16,
+		"status" : "penyidikan",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T08:39:02.060Z",
+		"updatedAt" : "2026-04-08T08:39:02.060Z"
+	},
+	{
+		"id" : 16,
+		"spdp_id" : 17,
+		"status" : "penyidikan",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T08:40:07.525Z",
+		"updatedAt" : "2026-04-08T08:40:07.525Z"
+	},
+	{
+		"id" : 17,
+		"spdp_id" : 18,
+		"status" : "penyidikan",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T08:42:46.563Z",
+		"updatedAt" : "2026-04-08T08:42:46.563Z"
+	},
+	{
+		"id" : 18,
+		"spdp_id" : 19,
+		"status" : "penyidikan",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T08:43:54.693Z",
+		"updatedAt" : "2026-04-08T08:43:54.693Z"
+	},
+	{
+		"id" : 19,
+		"spdp_id" : 20,
+		"status" : "penyidikan",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T08:45:01.741Z",
+		"updatedAt" : "2026-04-08T08:45:01.741Z"
+	},
+	{
+		"id" : 20,
+		"spdp_id" : 21,
+		"status" : "penyidikan",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T08:45:52.178Z",
+		"updatedAt" : "2026-04-08T08:45:52.178Z"
+	},
+	{
+		"id" : 21,
+		"spdp_id" : 22,
+		"status" : "penyidikan",
+		"created_by" : 1,
+		"createdAt" : "2026-04-08T08:46:34.422Z",
+		"updatedAt" : "2026-04-08T08:46:34.422Z"
+	}
+]}

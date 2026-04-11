@@ -1,0 +1,273 @@
+{
+"Users": [
+	{
+		"id" : 2,
+		"name" : "Bambang Yunianto, SH., MH",
+		"email" : "by@gmail.com",
+		"password" : "$2b$08$RSmExO4q\/7yHuKLPo1HhtOfWx7CXq1knGrbbH.gFFx7a\/prjCIv3O",
+		"role" : "kajari",
+		"createdAt" : "2026-04-06T15:25:15.095Z",
+		"updatedAt" : "2026-04-10T13:30:25.755Z",
+		"jaksa_id" : null
+	},
+	{
+		"id" : 1,
+		"name" : "Admin",
+		"email" : "admin@mail.com",
+		"password" : "$2b$10$pdH.\/ncYhkXGJaUJC9JY0OZPfZFp\/AVvZac1fOkFFhqaLsJwCQi.C",
+		"role" : "admin",
+		"createdAt" : "2026-04-05T15:56:27.195Z",
+		"updatedAt" : "2026-04-10T14:37:07.767Z",
+		"jaksa_id" : null
+	},
+	{
+		"id" : 54,
+		"name" : "Adinda Hapsari, S.H.",
+		"email" : "adinda.hapsari@jaksa.id",
+		"password" : "$2b$10$ZRxDkF\/L7AVYMjP\/QC6RleN5kG1J10h8\/TX\/jbYZRdrg9a8vGqKB2",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:10.731Z",
+		"updatedAt" : "2026-04-08T04:04:10.731Z",
+		"jaksa_id" : 53
+	},
+	{
+		"id" : 55,
+		"name" : "Fahma Asmoro Maharsi, S.H.",
+		"email" : "fahma.asmoro.maharsi@jaksa.id",
+		"password" : "$2b$10$H1Sywj2Zx7Yh\/jsAy6agO.V8bgDQz10p586WcX4IvAn33N6qY.tnG",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:10.797Z",
+		"updatedAt" : "2026-04-08T04:04:10.798Z",
+		"jaksa_id" : 54
+	},
+	{
+		"id" : 56,
+		"name" : "Rahajeng Dinar Hanggarjani, S.H., M.H.",
+		"email" : "rahajeng.dinar.hanggarjani@jaksa.id",
+		"password" : "$2b$10$xq95ohkv3qlaN05XgjVJDedZcgEnR4DK0MGhv5DKWXGxPqfV10Hn6",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:10.870Z",
+		"updatedAt" : "2026-04-08T04:04:10.870Z",
+		"jaksa_id" : 55
+	},
+	{
+		"id" : 57,
+		"name" : "Nisa Osalia Manah, S.H.",
+		"email" : "nisa.osalia.manah@jaksa.id",
+		"password" : "$2b$10$rY2JjFMjLwEZ5UzfoejepOcecZkS1Y.WAtsAhCBjCHJ2GImzDgvu6",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:10.942Z",
+		"updatedAt" : "2026-04-08T04:04:10.942Z",
+		"jaksa_id" : 56
+	},
+	{
+		"id" : 58,
+		"name" : "Hanifah, S.H.",
+		"email" : "hanifah@jaksa.id",
+		"password" : "$2b$10$N8PaHEId9FW.ozjn40GiquWRmBDyJUOJn4UnM2x5Q0BRapw9vJ.sS",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:11.010Z",
+		"updatedAt" : "2026-04-08T04:04:11.010Z",
+		"jaksa_id" : 57
+	},
+	{
+		"id" : 59,
+		"name" : "Kusuma Eka Mahendra R., S.H., M.H.",
+		"email" : "kusuma.eka.mahendra.r@jaksa.id",
+		"password" : "$2b$10$zAAfBedCaXXnlmMEbDk2lu1Va9KOx2oV3z5olpGyj.UPkISVHDXrm",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:11.075Z",
+		"updatedAt" : "2026-04-08T04:04:11.075Z",
+		"jaksa_id" : 58
+	},
+	{
+		"id" : 60,
+		"name" : "Shanty Elda Mayasari, S.H.",
+		"email" : "shanty.elda.mayasari@jaksa.id",
+		"password" : "$2b$10$QlMnczM\/OtS90XmejUPvluoCjioy4mRgRp2j79AUEWFM9cgiN05jq",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:11.143Z",
+		"updatedAt" : "2026-04-08T04:04:11.143Z",
+		"jaksa_id" : 59
+	},
+	{
+		"id" : 61,
+		"name" : "Rina Wisata, S.H.",
+		"email" : "rina.wisata@jaksa.id",
+		"password" : "$2b$10$2q481BM7Gxy9jQ1HATaWoe4hG4IDo\/A2NU1c3K0YlVmzaOC0IA\/fm",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:11.199Z",
+		"updatedAt" : "2026-04-08T04:04:11.199Z",
+		"jaksa_id" : 60
+	},
+	{
+		"id" : 62,
+		"name" : "Wiwik Triatmini, S.H., M.Hum.",
+		"email" : "wiwik.triatminium@jaksa.id",
+		"password" : "$2b$10$AxCExWt8DD47jYiszjyLe.hSlvz\/6XaGvbFBQcJtY677LvdWq.E9K",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:11.254Z",
+		"updatedAt" : "2026-04-08T04:04:11.254Z",
+		"jaksa_id" : 61
+	},
+	{
+		"id" : 63,
+		"name" : "Basaria Marpaung, S.H.",
+		"email" : "basaria.marpaung@jaksa.id",
+		"password" : "$2b$10$dExYQiN7ngC\/9ZMxpDV7cuiJHpyRPdMmjRtwDyJDPBUPycs4yP6IS",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:11.313Z",
+		"updatedAt" : "2026-04-08T04:04:11.313Z",
+		"jaksa_id" : 62
+	},
+	{
+		"id" : 64,
+		"name" : "Erlin Yuliastuti, S.H., M.H.",
+		"email" : "erlin.yuliastuti@jaksa.id",
+		"password" : "$2b$10$OHTLYlkHCTYmKo8Qop550ethAJ7UUY2lkA\/HFZXWZeIIUnVTY7sSi",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:11.381Z",
+		"updatedAt" : "2026-04-08T04:04:11.381Z",
+		"jaksa_id" : 63
+	},
+	{
+		"id" : 65,
+		"name" : "Indriastuti Yustiningsih, S.H., M.H.",
+		"email" : "indriastuti.yustiningsih@jaksa.id",
+		"password" : "$2b$10$QCFBGBvDXyfxJMQP27h0P.8HJ9kjpRxzzcppf6Rz3efpDK3UirQAm",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:11.450Z",
+		"updatedAt" : "2026-04-08T04:04:11.450Z",
+		"jaksa_id" : 64
+	},
+	{
+		"id" : 66,
+		"name" : "Hasti Winasih Novindari, S.H., M.H.",
+		"email" : "hasti.winasih.novindari@jaksa.id",
+		"password" : "$2b$10$AupiaEcfH8wV3AARXBN1oOp\/eRO3JMHfsTEu\/DlD8RhxV\/w3.8PKi",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:11.518Z",
+		"updatedAt" : "2026-04-08T04:04:11.518Z",
+		"jaksa_id" : 65
+	},
+	{
+		"id" : 67,
+		"name" : "Hesti Tri Rejeki, S.H.",
+		"email" : "hesti.tri.rejeki@jaksa.id",
+		"password" : "$2b$10$77omY3ZeG9AKlT7VV8aP9uHupTQji9tL8YjwKiTe2.fCcK7iGd2Qi",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:11.588Z",
+		"updatedAt" : "2026-04-08T04:04:11.588Z",
+		"jaksa_id" : 66
+	},
+	{
+		"id" : 68,
+		"name" : "Euis Ratnawati, S.H., M.H.",
+		"email" : "euis.ratnawati@jaksa.id",
+		"password" : "$2b$10$VoqoM5qI7evx0NXq3vRCIeMi6UIH4z0d4rRpWA1PDyd7k1UohtYRq",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:11.652Z",
+		"updatedAt" : "2026-04-08T04:04:11.652Z",
+		"jaksa_id" : 67
+	},
+	{
+		"id" : 69,
+		"name" : "Meilinda Margaretha H.N., S.H., M.HLi.",
+		"email" : "meilinda.margaretha.hnli@jaksa.id",
+		"password" : "$2b$10$s4dc13jW6A6onRb.fbQT8uGWMjrX1K0pe8LCX0msXGSGwoxlItb0i",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:11.709Z",
+		"updatedAt" : "2026-04-08T04:04:11.709Z",
+		"jaksa_id" : 68
+	},
+	{
+		"id" : 70,
+		"name" : "Siti Murharjanti, S.H.",
+		"email" : "siti.murharjanti@jaksa.id",
+		"password" : "$2b$10$Jsv7RqI2qSvxXgFCCIavaubtW1j8lqFcN7uIK\/soWEbg\/URQxhOZG",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:11.772Z",
+		"updatedAt" : "2026-04-08T04:04:11.772Z",
+		"jaksa_id" : 69
+	},
+	{
+		"id" : 71,
+		"name" : "Bambang Prasetyo, S.H.",
+		"email" : "bambang.prasetyo@jaksa.id",
+		"password" : "$2b$10$VuLTUqD9PMQ2nNJB39wM8uwDfHsLHfUgoC52Z3iYyab7wS.l.xP.W",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:11.824Z",
+		"updatedAt" : "2026-04-08T04:04:11.824Z",
+		"jaksa_id" : 70
+	},
+	{
+		"id" : 72,
+		"name" : "Rachma Aryani Tuasikal, S.H.",
+		"email" : "rachma.aryani.tuasikal@jaksa.id",
+		"password" : "$2b$10$YteW2cPyQwauRAkF2AWHfOaiJbgdqAU3bOIh4LnpqQTFmlviBPFdC",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:11.875Z",
+		"updatedAt" : "2026-04-08T04:04:11.875Z",
+		"jaksa_id" : 71
+	},
+	{
+		"id" : 73,
+		"name" : "Evita Christin Pranatasari, S.H.",
+		"email" : "evita.christin.pranatasari@jaksa.id",
+		"password" : "$2b$10$ttBb7W8l\/upKHMLg0SQC.ex.Y3TGNd7BiXd4R\/A4cxQFGIAx5.UvG",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:11.926Z",
+		"updatedAt" : "2026-04-08T04:04:11.926Z",
+		"jaksa_id" : 72
+	},
+	{
+		"id" : 74,
+		"name" : "Erica Normasari, S.H.",
+		"email" : "erica.normasari@jaksa.id",
+		"password" : "$2b$10$mYezNCcCuPEFjDLHFIV9reVVwozmc9VEGWzwdAvTEXHnltVHQ6ar.",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:11.977Z",
+		"updatedAt" : "2026-04-08T04:04:11.977Z",
+		"jaksa_id" : 73
+	},
+	{
+		"id" : 75,
+		"name" : "Rindi Atmoko, S.H.",
+		"email" : "rindi.atmoko@jaksa.id",
+		"password" : "$2b$10$06Cyc\/K3uQ46IQp3pVlDXOh8pWL57eo0e4npbH4SkhAU1WDq6GmJC",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:12.028Z",
+		"updatedAt" : "2026-04-08T04:04:12.028Z",
+		"jaksa_id" : 74
+	},
+	{
+		"id" : 76,
+		"name" : "Suratiningsih, S.H., M.H.",
+		"email" : "suratiningsih@jaksa.id",
+		"password" : "$2b$10$KIO5skzqRypQmJW\/uIbK\/O4WcMAW.gqL.CtgIMdpkSFXl2O1JKVe6",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:12.079Z",
+		"updatedAt" : "2026-04-08T04:04:12.079Z",
+		"jaksa_id" : 75
+	},
+	{
+		"id" : 77,
+		"name" : "joko",
+		"email" : "j@mail.com",
+		"password" : "$2b$08$CQudjaBgVITjqu5wyZEghO4sMd0YRuNMnB50c8UYysIQpPfPLBk7e",
+		"role" : "operator",
+		"createdAt" : "2026-04-10T13:17:30.558Z",
+		"updatedAt" : "2026-04-10T13:17:30.558Z",
+		"jaksa_id" : null
+	},
+	{
+		"id" : 53,
+		"name" : "Bagas Pradikta Haryanto, S.H.",
+		"email" : "bagas.pradikta.haryanto@jaksa.id",
+		"password" : "$2b$10$cXuJkyP66sO8sn9zbV2nsujtQqMCA4BMIcxVXryGMP3j3XORVKKlm",
+		"role" : "jaksa",
+		"createdAt" : "2026-04-08T04:04:10.666Z",
+		"updatedAt" : "2026-04-10T13:31:21.226Z",
+		"jaksa_id" : 52
+	}
+]}
