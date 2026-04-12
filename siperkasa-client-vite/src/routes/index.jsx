@@ -26,13 +26,11 @@ export default function AppRoutes() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/change-password" element={<ChangePasswordPage />} />
 
-          {/* ✅ pakai fragment wrapper */}
-          <>
-            <SpdpRoutes />
-            <JaksaRoutes />
-            <P16Routes />
-            <UserRoutes />
-          </>
+          {/* 🔥 INI YANG BENAR */}
+          {SpdpRoutes()}
+          {JaksaRoutes()}
+          {P16Routes()}
+          {UserRoutes()}
 
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Route>
