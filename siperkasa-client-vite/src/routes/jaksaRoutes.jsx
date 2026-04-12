@@ -1,26 +1,35 @@
-import { Route } from "react-router-dom";
+import { Route, Navigate } from "react-router-dom";
+import { getUser } from "../utils/auth";
+
 import JaksaPage from "../pages/jaksa/JaksaPage";
 import JaksaDetail from "../pages/jaksa/JaksaDetail";
 import JaksaForm from "../pages/jaksa/JaksaForm";
-import useAuth from "../hooks/useAuth";
 
 export default function JaksaRoutes() {
-  const { user, loading } = useAuth();
+  const user = getUser();
 
-  if (loading) return null;
+  return [
+    <Route key="jaksa" path="/jaksa" element={<JaksaPage />} />,
+    <Route key="jaksa-detail" path="/jaksa/:id" element={<JaksaDetail />} />,
 
-  return (
-    <>
-      <Route path="/jaksa" element={<JaksaPage />} />
-      <Route path="/jaksa/:id" element={<JaksaDetail />} />
+    <Route
+      key="jaksa-create"
+      path="/jaksa/create"
+      element={
+        ["admin", "operator"].includes(user?.role) ? (
+          <JaksaForm />
+        ) : (
+          <Navigate to="/dashboard" />
+        )
+      }
+    />,
 
-      {["admin", "operator"].includes(user?.role) && (
-        <Route path="/jaksa/create" element={<JaksaForm />} />
-      )}
-
-      {user?.role === "admin" && (
-        <Route path="/jaksa/edit/:id" element={<JaksaForm />} />
-      )}
-    </>
-  );
+    <Route
+      key="jaksa-edit"
+      path="/jaksa/edit/:id"
+      element={
+        user?.role === "admin" ? <JaksaForm /> : <Navigate to="/dashboard" />
+      }
+    />,
+  ];
 }

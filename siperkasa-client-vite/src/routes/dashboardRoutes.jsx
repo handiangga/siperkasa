@@ -1,11 +1,9 @@
 import DashboardKajari from "../pages/dashboard/dashboardKajari";
 import DashboardJaksa from "../pages/dashboard/dashboardJaksa";
-import useAuth from "../hooks/useAuth";
+import { getUser } from "../utils/auth";
 
 export default function DashboardRoutes() {
-  const { user, loading } = useAuth();
-
-  if (loading) return null;
+  const user = getUser();
 
   if (user?.role === "jaksa") {
     return <DashboardJaksa />;
