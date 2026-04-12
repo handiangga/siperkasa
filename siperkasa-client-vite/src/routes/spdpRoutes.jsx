@@ -1,19 +1,37 @@
+import { Route, Navigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+
 import SpdpPage from "../pages/spdp/SpdpPage";
 import SpdpCreate from "../pages/spdp/SpdpCreate";
 import SpdpDetail from "../pages/spdp/SpdpDetail";
 import SpdpEdit from "../pages/spdp/SpdpEdit";
 
-export default function SpdpRoutes(user) {
-  return [
-    <Route key="spdp" path="/spdp" element={<SpdpPage />} />,
-    <Route key="spdp-detail" path="/spdp/:id" element={<SpdpDetail />} />,
+export default function SpdpRoutes() {
+  const { user, loading } = useAuth();
+  if (loading) return null;
 
-    ["admin", "operator"].includes(user?.role) && (
-      <Route key="spdp-create" path="/spdp/create" element={<SpdpCreate />} />
-    ),
+  return (
+    <>
+      <Route path="/spdp" element={<SpdpPage />} />
+      <Route path="/spdp/:id" element={<SpdpDetail />} />
 
-    user?.role === "admin" && (
-      <Route key="spdp-edit" path="/spdp/edit/:id" element={<SpdpEdit />} />
-    ),
-  ];
+      <Route
+        path="/spdp/create"
+        element={
+          ["admin", "operator"].includes(user?.role) ? (
+            <SpdpCreate />
+          ) : (
+            <Navigate to="/dashboard" />
+          )
+        }
+      />
+
+      <Route
+        path="/spdp/edit/:id"
+        element={
+          user?.role === "admin" ? <SpdpEdit /> : <Navigate to="/dashboard" />
+        }
+      />
+    </>
+  );
 }

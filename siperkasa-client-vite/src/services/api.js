@@ -4,34 +4,38 @@ const api = axios.create({
   baseURL: "https://siperkasa.onrender.com",
 });
 
-// 🔥 REQUEST INTERCEPTOR
+// 🔥 REQUEST
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("access_token");
 
-  if (token) {
+  if (token && token !== "undefined") {
     config.headers.Authorization = `Bearer ${token}`;
   }
 
   return config;
 });
 
-// 🔥 RESPONSE INTERCEPTOR (AUTO HANDLE ERROR)
+// 🔥 RESPONSE
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response) {
-      const message = error.response.data?.message || "Terjadi kesalahan";
-
-      // 🔥 kalau unauthorized → logout otomatis
-      if (error.response.status === 401) {
-        localStorage.removeItem("access_token");
-        window.location.href = "/login";
-      }
-
-      return Promise.reject(message);
+    // ❌ NETWORK ERROR
+    if (!error.response) {
+      return Promise.reject("Server tidak terhubung");
     }
 
-    return Promise.reject("Server tidak terhubung");
+    const status = error.response.status;
+    const message = error.response.data?.message || "Terjadi kesalahan";
+
+    // 🔐 AUTO LOGOUT (lebih aman)
+    if (status === 401 || status === 403) {
+      localStorage.removeItem("access_token");
+
+      // 🔥 JANGAN ke /login (karena route kamu "/")
+      window.location.href = "/";
+    }
+
+    return Promise.reject(message);
   },
 );
 

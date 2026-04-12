@@ -20,6 +20,18 @@ export default function Layout() {
 
   const isActive = (path) => location.pathname.startsWith(path);
 
+  // 🔥 MENU DINAMIS
+  const menus = [
+    { name: "Dashboard", path: "/dashboard" },
+    { name: "SPDP", path: "/spdp" },
+    { name: "P16", path: "/p16" },
+    { name: "Jaksa", path: "/jaksa" },
+  ];
+
+  if (user?.role === "admin") {
+    menus.push({ name: "User", path: "/users" });
+  }
+
   return (
     <div className="min-h-screen bg-gray-100">
       {/* NAVBAR */}
@@ -34,61 +46,38 @@ export default function Layout() {
           </h1>
 
           <div className="flex gap-3 text-sm font-medium">
-            {[
-              { name: "Dashboard", path: "/dashboard" },
-              { name: "SPDP", path: "/spdp" },
-              { name: "P16", path: "/p16" },
-              { name: "Jaksa", path: "/jaksa" },
-            ].map((item) => (
+            {menus.map((item) => (
               <button
                 key={item.path}
                 onClick={() => navigate(item.path)}
-                className={`px-4 py-2 rounded-lg transition
-                  ${
-                    isActive(item.path)
-                      ? "bg-yellow-400 text-green-900 font-semibold"
-                      : "hover:bg-white/10"
-                  }`}
+                className={`px-4 py-2 rounded-lg transition ${
+                  isActive(item.path)
+                    ? "bg-yellow-400 text-green-900 font-semibold"
+                    : "hover:bg-white/10"
+                }`}
               >
                 {item.name}
               </button>
             ))}
-
-            {user?.role === "admin" && (
-              <button
-                onClick={() => navigate("/users")}
-                className={`px-4 py-2 rounded-lg transition
-                  ${
-                    isActive("/users")
-                      ? "bg-yellow-400 text-green-900 font-semibold"
-                      : "hover:bg-white/10"
-                  }`}
-              >
-                User
-              </button>
-            )}
           </div>
         </div>
 
-        {/* RIGHT (DROPDOWN PROFIL) */}
+        {/* RIGHT */}
         <div className="relative">
           <button
             onClick={() => setOpen(!open)}
             className="flex items-center gap-3 bg-white/10 px-3 py-2 rounded-lg hover:bg-white/20"
           >
-            {/* 🔵 AVATAR BULAT */}
             <div className="w-9 h-9 flex items-center justify-center rounded-full bg-yellow-400 text-green-900 font-bold">
               {user?.name?.charAt(0).toUpperCase()}
             </div>
 
-            {/* 👋 TEXT */}
             <div className="text-left text-sm leading-tight">
               <div className="font-semibold">Halo, {user?.name}</div>
               <div className="text-xs">{user?.role}</div>
             </div>
           </button>
 
-          {/* DROPDOWN */}
           {open && (
             <div className="absolute right-0 mt-2 w-52 bg-white text-black rounded-xl shadow-lg overflow-hidden z-50">
               <div className="px-4 py-3 border-b">
