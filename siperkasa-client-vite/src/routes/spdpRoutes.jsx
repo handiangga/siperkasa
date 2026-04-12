@@ -1,30 +1,19 @@
-import { Route } from "react-router-dom";
 import SpdpPage from "../pages/spdp/SpdpPage";
 import SpdpCreate from "../pages/spdp/SpdpCreate";
 import SpdpDetail from "../pages/spdp/SpdpDetail";
 import SpdpEdit from "../pages/spdp/SpdpEdit";
-import useAuth from "../hooks/useAuth";
 
-export default function SpdpRoutes() {
-  const { user } = useAuth();
+export default function SpdpRoutes(user) {
+  return [
+    <Route key="spdp" path="/spdp" element={<SpdpPage />} />,
+    <Route key="spdp-detail" path="/spdp/:id" element={<SpdpDetail />} />,
 
-  return (
-    <>
-      {/* LIST */}
-      <Route path="/spdp" element={<SpdpPage />} />
+    ["admin", "operator"].includes(user?.role) && (
+      <Route key="spdp-create" path="/spdp/create" element={<SpdpCreate />} />
+    ),
 
-      {/* DETAIL */}
-      <Route path="/spdp/:id" element={<SpdpDetail />} />
-
-      {/* CREATE */}
-      {["admin", "operator"].includes(user?.role) && (
-        <Route path="/spdp/create" element={<SpdpCreate />} />
-      )}
-
-      {/* EDIT */}
-      {user?.role === "admin" && (
-        <Route path="/spdp/edit/:id" element={<SpdpEdit />} />
-      )}
-    </>
-  );
+    user?.role === "admin" && (
+      <Route key="spdp-edit" path="/spdp/edit/:id" element={<SpdpEdit />} />
+    ),
+  ];
 }

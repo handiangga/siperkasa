@@ -4,19 +4,18 @@ import UserForm from "../pages/user/UserForm";
 import useAuth from "../hooks/useAuth";
 
 export default function UserRoutes() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  if (loading) return null;
 
   return (
     <>
-      {/* LIST */}
       <Route path="/users" element={<UserPage />} />
 
-      {/* CREATE */}
       {user?.role === "admin" && (
         <Route path="/users/create" element={<UserForm />} />
       )}
 
-      {/* EDIT */}
       {user?.role === "admin" && (
         <Route path="/users/edit/:id" element={<UserForm />} />
       )}

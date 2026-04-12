@@ -5,17 +5,15 @@ import P16DetailPage from "../pages/p16/P16DetailPage";
 import useAuth from "../hooks/useAuth";
 
 export default function P16Routes() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  if (loading) return null;
 
   return (
     <>
-      {/* LIST */}
       <Route path="/p16" element={<P16Page />} />
-
-      {/* DETAIL */}
       <Route path="/p16/:id" element={<P16DetailPage />} />
 
-      {/* EDIT */}
       {["admin", "operator"].includes(user?.role) && (
         <Route path="/p16/edit/:id" element={<P16EditPage />} />
       )}
