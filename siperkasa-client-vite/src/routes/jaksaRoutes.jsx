@@ -9,20 +9,18 @@ export default function JaksaRoutes() {
 
   return (
     <>
-      {/* 🔥 VIEW (admin, kajari, operator) */}
-      {["admin", "kajari", "operator"].includes(user?.role) && (
-        <>
-          <Route path="/jaksa" element={<JaksaPage />} />
-          <Route path="/jaksa/:id" element={<JaksaDetail />} />
-        </>
+      {/* VIEW */}
+      <Route path="/jaksa" element={<JaksaPage />} />
+      <Route path="/jaksa/:id" element={<JaksaDetail />} />
+
+      {/* CREATE */}
+      {["admin", "operator"].includes(user?.role) && (
+        <Route path="/jaksa/create" element={<JaksaForm />} />
       )}
 
-      {/* 🔥 CREATE & EDIT (admin only) */}
+      {/* EDIT */}
       {user?.role === "admin" && (
-        <>
-          <Route path="/jaksa/create" element={<JaksaForm />} />
-          <Route path="/jaksa/edit/:id" element={<JaksaForm />} />
-        </>
+        <Route path="/jaksa/edit/:id" element={<JaksaForm />} />
       )}
     </>
   );

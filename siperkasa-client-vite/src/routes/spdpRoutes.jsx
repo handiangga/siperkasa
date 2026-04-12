@@ -8,22 +8,21 @@ import useAuth from "../hooks/useAuth";
 export default function SpdpRoutes() {
   const { user } = useAuth();
 
-  // 🔥 FIX WAJIB: jangan render route kalau user belum kebaca
-  if (!user) return null;
-
   return (
     <>
-      {/* LIST & DETAIL */}
+      {/* LIST */}
       <Route path="/spdp" element={<SpdpPage />} />
+
+      {/* DETAIL */}
       <Route path="/spdp/:id" element={<SpdpDetail />} />
 
       {/* CREATE */}
-      {["admin", "operator"].includes(user.role) && (
+      {["admin", "operator"].includes(user?.role) && (
         <Route path="/spdp/create" element={<SpdpCreate />} />
       )}
 
       {/* EDIT */}
-      {user.role === "admin" && (
+      {user?.role === "admin" && (
         <Route path="/spdp/edit/:id" element={<SpdpEdit />} />
       )}
     </>
