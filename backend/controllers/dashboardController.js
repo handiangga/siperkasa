@@ -81,40 +81,36 @@ class DashboardController {
 
   static async jaksaStats(req, res, next) {
     try {
-      const { jaksa_id } = req.user;
+      const userId = req.user.id; // 🔥 FIX
 
+      // 🔥 ambil semua assignment milik jaksa ini
       const p16 = await P16Assignment.findAll({
-        where: { jaksa_id },
+        where: { jaksa_id: userId }, // 🔥 FIX
         include: [
           {
             model: Perkara,
             include: [
               {
                 model: Spdp,
-                as: "Spdp", // 🔥 FIX
+                as: "Spdp",
               },
             ],
           },
         ],
       });
 
-      const perkaraIds = p16.map((p) => p.perkara_id);
-
-      const perkara = await Perkara.findAll({
-        where: { id: perkaraIds },
-        include: [
-          {
-            model: Spdp,
-            as: "Spdp", // 🔥 FIX
-          },
-        ],
-      });
+      // 🔥 ambil perkara dari assignment (AMAN)
+      const perkara = p16.map((item) => item.Perkara).filter((p) => p !== null);
 
       const total = perkara.length;
 
-      const aktif = perkara.filter((p) => p.status === "penyidikan").length;
+      const aktif = perkara.filter(
+        (p) => p.status === "penyidikan" || p.status === "proses",
+      ).length;
 
-      const selesai = perkara.filter((p) => p.status === "sidang").length;
+      const selesai = perkara.filter(
+        (p) => p.status === "sidang" || p.status === "selesai",
+      ).length;
 
       res.json({
         total,
@@ -123,7 +119,11 @@ class DashboardController {
         perkara,
       });
     } catch (err) {
-      next(err);
+      console.log("ERROR DASHBOARD JAKSA:", err); // 🔥 DEBUG WAJIB
+      res.status(500).json({
+        message: "Dashboard jaksa error",
+        error: err.message,
+      });
     }
   }
 }
