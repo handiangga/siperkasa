@@ -10,9 +10,10 @@ export default function SpdpRoutes() {
   const user = getUser();
 
   return [
+    // ✅ LIST
     <Route key="spdp" path="/spdp" element={<SpdpPage />} />,
-    <Route key="spdp-detail" path="/spdp/:id" element={<SpdpDetail />} />,
 
+    // ✅ CREATE (HARUS DI ATAS DETAIL)
     <Route
       key="spdp-create"
       path="/spdp/create"
@@ -20,17 +21,25 @@ export default function SpdpRoutes() {
         ["admin", "operator"].includes(user?.role) ? (
           <SpdpCreate />
         ) : (
-          <Navigate to="/dashboard" />
+          <Navigate to="/dashboard" replace />
         )
       }
     />,
 
+    // ✅ EDIT (HARUS DI ATAS DETAIL)
     <Route
       key="spdp-edit"
       path="/spdp/edit/:id"
       element={
-        user?.role === "admin" ? <SpdpEdit /> : <Navigate to="/dashboard" />
+        user?.role === "admin" ? (
+          <SpdpEdit />
+        ) : (
+          <Navigate to="/dashboard" replace />
+        )
       }
     />,
+
+    // ✅ DETAIL (PALING BAWAH BIAR GAK NANGKEP SEMUA)
+    <Route key="spdp-detail" path="/spdp/:id" element={<SpdpDetail />} />,
   ];
 }
