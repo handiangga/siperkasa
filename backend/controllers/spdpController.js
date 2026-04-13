@@ -2,26 +2,36 @@ const { Spdp, Perkara } = require("../models");
 
 class SpdpController {
   static async create(req, res, next) {
+    const t = await Spdp.sequelize.transaction();
+
     try {
       const { nomor_spdp, tanggal_spdp, asal_instansi, nama_tersangka, pasal } =
         req.body;
 
-      // 🔥 1. buat SPDP
-      const spdp = await Spdp.create({
-        nomor_spdp,
-        tanggal_spdp,
-        asal_instansi,
-        nama_tersangka,
-        pasal,
-        created_by: req.user.id,
-      });
+      // 🔥 1. create SPDP
+      const spdp = await Spdp.create(
+        {
+          nomor_spdp,
+          tanggal_spdp,
+          asal_instansi,
+          nama_tersangka,
+          pasal,
+          created_by: req.user.id,
+        },
+        { transaction: t },
+      );
 
-      // 🔥 2. otomatis buat Perkara
-      const perkara = await Perkara.create({
-        spdp_id: spdp.id,
-        status: "penyidikan",
-        created_by: req.user.id,
-      });
+      // 🔥 2. create Perkara
+      const perkara = await Perkara.create(
+        {
+          spdp_id: spdp.id,
+          status: "penyidikan",
+          created_by: req.user.id,
+        },
+        { transaction: t },
+      );
+
+      await t.commit();
 
       res.status(201).json({
         message: "SPDP & Perkara berhasil dibuat",
@@ -29,6 +39,7 @@ class SpdpController {
         perkara,
       });
     } catch (err) {
+      await t.rollback();
       next(err);
     }
   }
