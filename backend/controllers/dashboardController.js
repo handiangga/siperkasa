@@ -81,53 +81,41 @@ class DashboardController {
 
   static async jaksaStats(req, res, next) {
     try {
-      const { Jaksa, P16Assignment, Perkara, Spdp } = require("../models");
+      const { User, P16Assignment, Perkara, Spdp } = require("../models");
 
-      const userId = req.user.id;
+      // 🔥 ambil user dulu
+      const user = await User.findByPk(req.user.id);
 
-      // 🔥 1. ambil jaksa dari user
-      const jaksa = await Jaksa.findOne({
-        where: { user_id: userId },
-      });
-
-      if (!jaksa) {
-        return res.json({
-          total: 0,
-          aktif: 0,
-          selesai: 0,
-          perkara: [],
-        });
+      if (!user || !user.jaksa_id) {
+        throw { name: "Forbidden", message: "Tidak punya akses" };
       }
 
-      // 🔥 2. ambil assignment
+      const jaksa_id = user.jaksa_id;
+
+      // 🔥 ambil P16
       const p16 = await P16Assignment.findAll({
-        where: { jaksa_id: jaksa.id },
+        where: { jaksa_id },
         include: [
           {
             model: Perkara,
-            as: "Perkara", // 🔥 WAJIB (SESUI MODEL)
+            as: "Perkara", // 🔥 WAJIB
             include: [
               {
                 model: Spdp,
-                as: "Spdp", // ⚠️ pastikan ini juga ada di model Perkara
+                as: "Spdp",
               },
             ],
           },
         ],
       });
 
-      // 🔥 3. mapping perkara
-      const perkara = p16.map((item) => item.Perkara).filter(Boolean);
+      const perkara = p16.map((p) => p.Perkara).filter(Boolean);
 
       const total = perkara.length;
 
-      const aktif = perkara.filter(
-        (p) => p.status === "penyidikan" || p.status === "proses",
-      ).length;
+      const aktif = perkara.filter((p) => p.status === "penyidikan").length;
 
-      const selesai = perkara.filter(
-        (p) => p.status === "sidang" || p.status === "selesai",
-      ).length;
+      const selesai = perkara.filter((p) => p.status === "sidang").length;
 
       res.json({
         total,
@@ -136,11 +124,8 @@ class DashboardController {
         perkara,
       });
     } catch (err) {
-      console.log("ERROR DASHBOARD JAKSA:", err);
-      res.status(500).json({
-        message: "Dashboard jaksa error",
-        error: err.message,
-      });
+      console.log("ERROR JAKSA:", err);
+      next(err);
     }
   }
 }
