@@ -85,7 +85,7 @@ class DashboardController {
 
       const userId = req.user.id;
 
-      // 🔥 1. cari jaksa dari user
+      // 🔥 1. ambil jaksa dari user
       const jaksa = await Jaksa.findOne({
         where: { user_id: userId },
       });
@@ -99,23 +99,24 @@ class DashboardController {
         });
       }
 
-      // 🔥 2. ambil assignment berdasarkan jaksa.id
+      // 🔥 2. ambil assignment
       const p16 = await P16Assignment.findAll({
         where: { jaksa_id: jaksa.id },
         include: [
           {
             model: Perkara,
+            as: "Perkara", // 🔥 WAJIB (SESUI MODEL)
             include: [
               {
                 model: Spdp,
-                as: "Spdp",
+                as: "Spdp", // ⚠️ pastikan ini juga ada di model Perkara
               },
             ],
           },
         ],
       });
 
-      // 🔥 3. ambil perkara
+      // 🔥 3. mapping perkara
       const perkara = p16.map((item) => item.Perkara).filter(Boolean);
 
       const total = perkara.length;
