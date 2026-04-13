@@ -3,7 +3,13 @@ import api from "../../services/api";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
-import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
+import {
+  FaEye,
+  FaEdit,
+  FaTrash,
+  FaSortAmountDown,
+  FaSortAmountUp,
+} from "react-icons/fa";
 import useAuth from "../../hooks/useAuth";
 import { ENDPOINT } from "../../constants/endpoint";
 
@@ -16,6 +22,9 @@ export default function SpdpPage() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
 
+  // 🔥 SORT DEFAULT TERBARU
+  const [sort, setSort] = useState("desc");
+
   const limit = 10;
 
   const navigate = useNavigate();
@@ -24,7 +33,7 @@ export default function SpdpPage() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const res = await api.get(ENDPOINT.SPDP); // 🔥 FIX
+      const res = await api.get(ENDPOINT.SPDP);
       setData(res.data || []);
     } catch (err) {
       console.log(err);
@@ -45,18 +54,27 @@ export default function SpdpPage() {
     fetchData();
   }, []);
 
+  // 🔥 FILTER
   const filtered = data.filter((item) =>
     `${item.nomor_spdp} ${item.nama_tersangka} ${item.pasal || ""}`
       .toLowerCase()
       .includes(search.toLowerCase()),
   );
 
-  const totalPages = Math.ceil(filtered.length / limit);
-  const paginatedData = filtered.slice((page - 1) * limit, page * limit);
+  // 🔥 SORT BY TANGGAL
+  const sorted = [...filtered].sort((a, b) => {
+    const dateA = new Date(a.tanggal_spdp);
+    const dateB = new Date(b.tanggal_spdp);
+
+    return sort === "desc" ? dateB - dateA : dateA - dateB;
+  });
+
+  const totalPages = Math.ceil(sorted.length / limit);
+  const paginatedData = sorted.slice((page - 1) * limit, page * limit);
 
   useEffect(() => {
     setPage(1);
-  }, [search]);
+  }, [search, sort]);
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -70,7 +88,7 @@ export default function SpdpPage() {
     }).then(async (res) => {
       if (res.isConfirmed) {
         try {
-          await api.delete(`${ENDPOINT.SPDP}/${id}`); // 🔥 FIX
+          await api.delete(`${ENDPOINT.SPDP}/${id}`);
 
           Toast.fire({
             icon: "success",
@@ -97,14 +115,26 @@ export default function SpdpPage() {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-green-800">Data SPDP</h2>
 
-        {(isAdmin || isOperator) && (
+        <div className="flex gap-2">
+          {/* 🔥 SORT BUTTON */}
           <button
-            onClick={() => navigate("/spdp/create")}
-            className="bg-green-800 text-white px-4 py-2 rounded-lg hover:bg-green-900"
+            type="button"
+            onClick={() => setSort(sort === "desc" ? "asc" : "desc")}
+            className="bg-gray-200 p-3 rounded-lg hover:bg-gray-300"
           >
-            + Tambah SPDP
+            {sort === "desc" ? <FaSortAmountDown /> : <FaSortAmountUp />}
           </button>
-        )}
+
+          {(isAdmin || isOperator) && (
+            <button
+              type="button"
+              onClick={() => navigate("/spdp/create")}
+              className="bg-green-800 text-white px-4 py-2 rounded-lg hover:bg-green-900"
+            >
+              + Tambah SPDP
+            </button>
+          )}
+        </div>
       </div>
 
       {/* SEARCH */}
@@ -152,6 +182,7 @@ export default function SpdpPage() {
                 <td>
                   <div className="flex justify-center gap-2">
                     <button
+                      type="button"
                       onClick={() => navigate(`/spdp/${item.id}`)}
                       className="bg-blue-500 text-white p-2 rounded hover:scale-110"
                     >
@@ -160,6 +191,7 @@ export default function SpdpPage() {
 
                     {(isAdmin || isOperator) && (
                       <button
+                        type="button"
                         onClick={() => navigate(`/spdp/edit/${item.id}`)}
                         className="bg-yellow-400 p-2 rounded hover:scale-110"
                       >
@@ -169,6 +201,7 @@ export default function SpdpPage() {
 
                     {isAdmin && (
                       <button
+                        type="button"
                         onClick={() => handleDelete(item.id)}
                         className="bg-red-500 text-white p-2 rounded hover:scale-110"
                       >

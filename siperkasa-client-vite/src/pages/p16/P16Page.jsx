@@ -70,15 +70,6 @@ export default function P16Page() {
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-green-800">Data P16</h2>
-
-        {(isAdmin || isOperator) && (
-          <button
-            onClick={() => navigate("/p16/create")}
-            className="bg-green-800 text-white px-4 py-2 rounded-lg hover:bg-green-900"
-          >
-            + Tambah P16
-          </button>
-        )}
       </div>
 
       {/* SEARCH */}
