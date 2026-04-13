@@ -10,6 +10,7 @@ import {
   FaSortAmountDown,
   FaSortAmountUp,
 } from "react-icons/fa";
+
 import useAuth from "../../hooks/useAuth";
 import { ENDPOINT } from "../../constants/endpoint";
 
@@ -22,13 +23,15 @@ export default function SpdpPage() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
 
-  // 🔥 SORT DEFAULT TERBARU
+  // 🔥 DEFAULT SORT TERBARU
   const [sort, setSort] = useState("desc");
+
   const limit = 10;
 
   const navigate = useNavigate();
   const { isAdmin, isOperator } = useAuth();
 
+  // ================= FETCH =================
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -42,25 +45,18 @@ export default function SpdpPage() {
     }
   };
 
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-end",
-    showConfirmButton: false,
-    timer: 2000,
-  });
-
   useEffect(() => {
     fetchData();
   }, []);
 
-  // 🔥 FILTER
+  // ================= FILTER =================
   const filtered = data.filter((item) =>
     `${item.nomor_spdp} ${item.nama_tersangka} ${item.pasal || ""}`
       .toLowerCase()
       .includes(search.toLowerCase()),
   );
 
-  // 🔥 SORT BY TANGGAL
+  // ================= SORT =================
   const sorted = [...filtered].sort((a, b) => {
     const dateA = new Date(a.tanggal_spdp);
     const dateB = new Date(b.tanggal_spdp);
@@ -68,12 +64,21 @@ export default function SpdpPage() {
     return sort === "desc" ? dateB - dateA : dateA - dateB;
   });
 
+  // ================= PAGINATION =================
   const totalPages = Math.ceil(sorted.length / limit);
   const paginatedData = sorted.slice((page - 1) * limit, page * limit);
 
   useEffect(() => {
     setPage(1);
   }, [search, sort]);
+
+  // ================= DELETE =================
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 2000,
+  });
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -110,44 +115,42 @@ export default function SpdpPage() {
 
   return (
     <div>
-      {/* HEADER */}
+      {/* ================= HEADER ================= */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-green-800">Data SPDP</h2>
 
-        <div className="flex gap-2">
-          {/* 🔥 SORT BUTTON */}
+        {(isAdmin || isOperator) && (
           <button
             type="button"
-            onClick={() => setSort(sort === "desc" ? "asc" : "desc")}
-            className="bg-gray-200 p-3 rounded-lg hover:bg-gray-300"
+            onClick={() => navigate("/spdp/create")}
+            className="bg-green-800 text-white px-4 py-2 rounded-lg hover:bg-green-900 shadow"
           >
-            {sort === "desc" ? <FaSortAmountDown /> : <FaSortAmountUp />}
+            + Tambah SPDP
           </button>
-
-          {(isAdmin || isOperator) && (
-            <button
-              type="button"
-              onClick={() => navigate("/spdp/create")}
-              className="bg-green-800 text-white px-4 py-2 rounded-lg hover:bg-green-900"
-            >
-              + Tambah SPDP
-            </button>
-          )}
-        </div>
+        )}
       </div>
 
-      {/* SEARCH */}
-      <div className="bg-white p-4 rounded-xl shadow mb-4">
+      {/* ================= SEARCH + SORT ================= */}
+      <div className="bg-white p-4 rounded-xl shadow mb-4 flex gap-3 items-center">
         <input
           type="text"
           placeholder="🔍 Cari semua data SPDP..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-700 outline-none"
+          className="flex-1 p-3 border rounded-lg focus:ring-2 focus:ring-green-700 outline-none"
         />
+
+        <button
+          type="button"
+          title="Urutkan data"
+          onClick={() => setSort(sort === "desc" ? "asc" : "desc")}
+          className="bg-gray-100 p-3 rounded-lg hover:bg-gray-200 transition"
+        >
+          {sort === "desc" ? <FaSortAmountDown /> : <FaSortAmountUp />}
+        </button>
       </div>
 
-      {/* TABLE */}
+      {/* ================= TABLE ================= */}
       <div className="bg-white rounded-xl shadow overflow-hidden">
         <table className="w-full table-fixed text-center">
           <thead className="bg-green-800 text-white">
@@ -215,7 +218,7 @@ export default function SpdpPage() {
         </table>
       </div>
 
-      {/* PAGINATION */}
+      {/* ================= PAGINATION ================= */}
       <div className="flex justify-center mt-4 gap-2">
         <button
           disabled={page === 1}
