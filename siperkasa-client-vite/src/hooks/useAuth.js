@@ -2,19 +2,18 @@ import { useState, useEffect } from "react";
 import { getUser } from "../utils/auth";
 
 export default function useAuth() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(undefined); // 🔥 BUKAN null
 
   useEffect(() => {
     try {
       const data = getUser();
-      setUser(data);
+      setUser(data || null);
     } catch (err) {
       setUser(null);
-    } finally {
-      setLoading(false);
     }
   }, []);
+
+  const loading = user === undefined; // 🔥 derive loading
 
   return {
     user,
