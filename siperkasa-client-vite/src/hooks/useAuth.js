@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { getUser } from "../utils/auth";
 
 export default function useAuth() {
-  const [user, setUser] = useState(undefined); // 🔥 BUKAN null
+  const [user, setUser] = useState(undefined);
 
   useEffect(() => {
     try {
@@ -13,16 +13,19 @@ export default function useAuth() {
     }
   }, []);
 
-  const loading = user === undefined; // 🔥 derive loading
+  const loading = user === undefined;
+
+  // 🔥 NORMALISASI ROLE (INI KUNCI)
+  const role = user?.role?.toLowerCase().trim();
 
   return {
     user,
     loading,
-    role: user?.role || null,
+    role,
     isAuth: !!user,
-    isAdmin: user?.role === "admin",
-    isKajari: user?.role === "kajari",
-    isOperator: user?.role === "operator",
-    isJaksa: user?.role === "jaksa",
+    isAdmin: role === "admin",
+    isKajari: role === "kajari",
+    isOperator: role === "operator",
+    isJaksa: role === "jaksa",
   };
 }

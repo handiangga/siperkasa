@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
+import Loading from "../common/Loading"; // 🔥 tambahin
 
 export default function ProtectedRoute() {
   const [loading, setLoading] = useState(true);
@@ -11,11 +12,11 @@ export default function ProtectedRoute() {
     setLoading(false);
   }, []);
 
-  // 🔥 tahan dulu biar gak redirect prematur
-  if (loading) return null;
+  // 🔥 kasih loading biar smooth
+  if (loading) return <Loading />;
 
   // ❌ belum login
-  if (!token || token === "undefined") {
+  if (!token || token === "undefined" || token === "null") {
     return <Navigate to="/" replace />;
   }
 
