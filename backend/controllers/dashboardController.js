@@ -81,11 +81,27 @@ class DashboardController {
 
   static async jaksaStats(req, res, next) {
     try {
-      const userId = req.user.id; // 🔥 FIX
+      const { Jaksa, P16Assignment, Perkara, Spdp } = require("../models");
 
-      // 🔥 ambil semua assignment milik jaksa ini
+      const userId = req.user.id;
+
+      // 🔥 1. cari jaksa dari user
+      const jaksa = await Jaksa.findOne({
+        where: { user_id: userId },
+      });
+
+      if (!jaksa) {
+        return res.json({
+          total: 0,
+          aktif: 0,
+          selesai: 0,
+          perkara: [],
+        });
+      }
+
+      // 🔥 2. ambil assignment berdasarkan jaksa.id
       const p16 = await P16Assignment.findAll({
-        where: { jaksa_id: userId }, // 🔥 FIX
+        where: { jaksa_id: jaksa.id },
         include: [
           {
             model: Perkara,
@@ -99,8 +115,8 @@ class DashboardController {
         ],
       });
 
-      // 🔥 ambil perkara dari assignment (AMAN)
-      const perkara = p16.map((item) => item.Perkara).filter((p) => p !== null);
+      // 🔥 3. ambil perkara
+      const perkara = p16.map((item) => item.Perkara).filter(Boolean);
 
       const total = perkara.length;
 
@@ -119,7 +135,7 @@ class DashboardController {
         perkara,
       });
     } catch (err) {
-      console.log("ERROR DASHBOARD JAKSA:", err); // 🔥 DEBUG WAJIB
+      console.log("ERROR DASHBOARD JAKSA:", err);
       res.status(500).json({
         message: "Dashboard jaksa error",
         error: err.message,
