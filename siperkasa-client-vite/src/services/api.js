@@ -19,7 +19,6 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // ❌ NETWORK ERROR
     if (!error.response) {
       return Promise.reject("Server tidak terhubung");
     }
@@ -27,12 +26,15 @@ api.interceptors.response.use(
     const status = error.response.status;
     const message = error.response.data?.message || "Terjadi kesalahan";
 
-    // 🔐 AUTO LOGOUT (lebih aman)
-    if (status === 401 || status === 403) {
+    // 🔐 HANYA logout kalau 401 (token invalid)
+    if (status === 401) {
       localStorage.removeItem("access_token");
-
-      // 🔥 JANGAN ke /login (karena route kamu "/")
       window.location.href = "/";
+    }
+
+    // ❗ 403 jangan logout (biar UI handle)
+    if (status === 403) {
+      console.warn("Forbidden:", message);
     }
 
     return Promise.reject(message);
