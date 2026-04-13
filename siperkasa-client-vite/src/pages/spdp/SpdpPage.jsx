@@ -24,7 +24,6 @@ export default function SpdpPage() {
 
   // 🔥 SORT DEFAULT TERBARU
   const [sort, setSort] = useState("desc");
-
   const limit = 10;
 
   const navigate = useNavigate();
