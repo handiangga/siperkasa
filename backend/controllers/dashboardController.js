@@ -1,13 +1,16 @@
-const { P16Assignment, Perkara, Spdp, Jaksa } = require("../models");
+const { P16Assignment, Perkara, Spdp, Jaksa, User } = require("../models");
 
 class DashboardController {
+  // =========================
+  // 🔥 DASHBOARD ADMIN / KAJARI
+  // =========================
   static async fullStats(req, res, next) {
     try {
       const perkara = await Perkara.findAll({
         include: [
           {
             model: Spdp,
-            as: "Spdp", // 🔥 WAJIB (SUDAH SESUAI MODEL KAMU)
+            as: "Spdp",
           },
         ],
       });
@@ -79,11 +82,12 @@ class DashboardController {
     }
   }
 
+  // =========================
+  // 🔥 DASHBOARD JAKSA (FIX + PERAN)
+  // =========================
   static async jaksaStats(req, res, next) {
     try {
-      const { User, P16Assignment, Perkara, Spdp } = require("../models");
-
-      // 🔥 ambil user dulu
+      // 🔥 ambil user
       const user = await User.findByPk(req.user.id);
 
       if (!user || !user.jaksa_id) {
@@ -92,13 +96,13 @@ class DashboardController {
 
       const jaksa_id = user.jaksa_id;
 
-      // 🔥 ambil P16
+      // 🔥 ambil P16 + perkara + spdp
       const p16 = await P16Assignment.findAll({
         where: { jaksa_id },
         include: [
           {
             model: Perkara,
-            as: "Perkara", // 🔥 WAJIB
+            as: "Perkara",
             include: [
               {
                 model: Spdp,
@@ -109,7 +113,17 @@ class DashboardController {
         ],
       });
 
-      const perkara = p16.map((p) => p.Perkara).filter(Boolean);
+      // 🔥 inject peran ke perkara
+      const perkara = p16
+        .map((p) => {
+          if (!p.Perkara) return null;
+
+          return {
+            ...p.Perkara.toJSON(),
+            peran: p.peran, // 🔥 INI YANG DIPAKAI DI FE
+          };
+        })
+        .filter(Boolean);
 
       const total = perkara.length;
 

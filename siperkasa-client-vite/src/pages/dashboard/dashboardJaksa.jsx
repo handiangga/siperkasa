@@ -24,7 +24,7 @@ export default function DashboardJaksa() {
 
       const res = await api.get(ENDPOINT.DASHBOARD_JAKSA);
 
-      console.log("DASHBOARD JAKSA:", res.data); // 🔥 debug
+      console.log("DASHBOARD JAKSA:", res.data);
 
       setData(res.data);
     } catch (err) {
@@ -34,17 +34,14 @@ export default function DashboardJaksa() {
     }
   }
 
-  // 🔥 LOADING HANDLE
   if (loading) {
     return <p className="text-center mt-10">Loading...</p>;
   }
 
-  // 🔥 SAFETY
   if (!data) {
     return <p className="text-center mt-10 text-red-500">Data tidak ada</p>;
   }
 
-  // 🔥 PIE CHART SAFE
   const pieData = {
     labels: ["Aktif", "Selesai"],
     datasets: [
@@ -82,7 +79,7 @@ export default function DashboardJaksa() {
               data.perkara.map((p) => (
                 <div
                   key={p.id}
-                  onClick={() => navigate(`/p16/${p.id}`)} // 🔥 FIX ROUTE
+                  onClick={() => navigate(`/p16/${p.id}`)}
                   className="p-3 border-b cursor-pointer hover:bg-gray-50"
                 >
                   <p className="font-semibold">{p?.Spdp?.nomor_spdp || "-"}</p>
@@ -91,16 +88,34 @@ export default function DashboardJaksa() {
                     {p?.Spdp?.nama_tersangka || "-"}
                   </p>
 
-                  <span
-                    className={`text-xs px-2 py-1 rounded mt-1 inline-block
-                    ${
-                      p.status === "penyidikan" || p.status === "proses"
-                        ? "bg-yellow-100 text-yellow-700"
-                        : "bg-green-100 text-green-700"
-                    }`}
-                  >
-                    {p.status}
-                  </span>
+                  {/* 🔥 STATUS + PERAN */}
+                  <div className="flex gap-2 mt-1">
+                    {/* STATUS */}
+                    <span
+                      className={`text-xs px-2 py-1 rounded
+                      ${
+                        p.status === "penyidikan" || p.status === "proses"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : "bg-green-100 text-green-700"
+                      }`}
+                    >
+                      {p.status}
+                    </span>
+
+                    {/* 🔥 PERAN */}
+                    {p.peran && (
+                      <span
+                        className={`text-xs px-2 py-1 rounded
+                        ${
+                          p.peran === "utama"
+                            ? "bg-blue-100 text-blue-700"
+                            : "bg-gray-200 text-gray-700"
+                        }`}
+                      >
+                        {p.peran === "utama" ? "Jaksa Utama" : "Jaksa Anggota"}
+                      </span>
+                    )}
+                  </div>
                 </div>
               ))
             ) : (
