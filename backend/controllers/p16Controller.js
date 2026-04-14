@@ -43,28 +43,55 @@ class P16Controller {
     }
   }
 
-  // 🔍 GET ALL
+  // 🔥 GET ALL (ROLE BASED)
   static async getAll(req, res, next) {
     try {
-      const data = await P16Assignment.findAll({
-        include: [
-          {
-            model: Perkara,
-            as: "Perkara",
-            include: [
-              {
-                model: Spdp,
-                as: "Spdp",
-              },
-            ],
-          },
-          {
-            model: Jaksa,
-            as: "Jaksa",
-          },
-        ],
-        order: [["createdAt", "DESC"]],
-      });
+      const { role, jaksa_id } = req.user;
+
+      let data;
+
+      if (role === "jaksa") {
+        data = await P16Assignment.findAll({
+          where: { jaksa_id },
+          include: [
+            {
+              model: Perkara,
+              as: "Perkara",
+              include: [
+                {
+                  model: Spdp,
+                  as: "Spdp",
+                },
+              ],
+            },
+            {
+              model: Jaksa,
+              as: "Jaksa",
+            },
+          ],
+          order: [["createdAt", "DESC"]],
+        });
+      } else {
+        data = await P16Assignment.findAll({
+          include: [
+            {
+              model: Perkara,
+              as: "Perkara",
+              include: [
+                {
+                  model: Spdp,
+                  as: "Spdp",
+                },
+              ],
+            },
+            {
+              model: Jaksa,
+              as: "Jaksa",
+            },
+          ],
+          order: [["createdAt", "DESC"]],
+        });
+      }
 
       res.status(200).json(data);
     } catch (err) {
@@ -72,31 +99,57 @@ class P16Controller {
     }
   }
 
-  // 🔍 BY PERKARA
+  // 🔥 BY PERKARA (ROLE SAFE)
   static async getByPerkara(req, res, next) {
     try {
       const { id } = req.params;
+      const { role, jaksa_id } = req.user;
 
-      const data = await P16Assignment.findAll({
-        where: { perkara_id: id },
-        include: [
-          {
-            model: Perkara,
-            as: "Perkara",
-            include: [
-              {
-                model: Spdp,
-                as: "Spdp",
-              },
-            ],
-          },
-          {
-            model: Jaksa,
-            as: "Jaksa",
-          },
-        ],
-        order: [["createdAt", "DESC"]],
-      });
+      let data;
+
+      if (role === "jaksa") {
+        data = await P16Assignment.findAll({
+          where: { perkara_id: id, jaksa_id },
+          include: [
+            {
+              model: Perkara,
+              as: "Perkara",
+              include: [
+                {
+                  model: Spdp,
+                  as: "Spdp",
+                },
+              ],
+            },
+            {
+              model: Jaksa,
+              as: "Jaksa",
+            },
+          ],
+          order: [["createdAt", "DESC"]],
+        });
+      } else {
+        data = await P16Assignment.findAll({
+          where: { perkara_id: id },
+          include: [
+            {
+              model: Perkara,
+              as: "Perkara",
+              include: [
+                {
+                  model: Spdp,
+                  as: "Spdp",
+                },
+              ],
+            },
+            {
+              model: Jaksa,
+              as: "Jaksa",
+            },
+          ],
+          order: [["createdAt", "DESC"]],
+        });
+      }
 
       res.status(200).json(data);
     } catch (err) {
@@ -104,7 +157,7 @@ class P16Controller {
     }
   }
 
-  // 🔍 BY JAKSA
+  // 🔥 BY JAKSA
   static async getByJaksa(req, res, next) {
     try {
       const { id } = req.params;
@@ -132,29 +185,54 @@ class P16Controller {
     }
   }
 
-  // 🔍 DETAIL
+  // 🔥 DETAIL (ROLE SAFE)
   static async getById(req, res, next) {
     try {
       const { id } = req.params;
+      const { role, jaksa_id } = req.user;
 
-      const data = await P16Assignment.findByPk(id, {
-        include: [
-          {
-            model: Perkara,
-            as: "Perkara",
-            include: [
-              {
-                model: Spdp,
-                as: "Spdp",
-              },
-            ],
-          },
-          {
-            model: Jaksa,
-            as: "Jaksa",
-          },
-        ],
-      });
+      let data;
+
+      if (role === "jaksa") {
+        data = await P16Assignment.findOne({
+          where: { id, jaksa_id },
+          include: [
+            {
+              model: Perkara,
+              as: "Perkara",
+              include: [
+                {
+                  model: Spdp,
+                  as: "Spdp",
+                },
+              ],
+            },
+            {
+              model: Jaksa,
+              as: "Jaksa",
+            },
+          ],
+        });
+      } else {
+        data = await P16Assignment.findByPk(id, {
+          include: [
+            {
+              model: Perkara,
+              as: "Perkara",
+              include: [
+                {
+                  model: Spdp,
+                  as: "Spdp",
+                },
+              ],
+            },
+            {
+              model: Jaksa,
+              as: "Jaksa",
+            },
+          ],
+        });
+      }
 
       if (!data) {
         throw {
@@ -168,17 +246,14 @@ class P16Controller {
       next(err);
     }
   }
+
+  // 🔄 UPDATE
   static async update(req, res, next) {
     const t = await sequelize.transaction();
 
     try {
-      // 🔥 FIX UTAMA (AMBIL ID DENGAN AMAN)
       const perkara_id = req.params.perkara_id || req.params.id;
-
       const { jaksa_list } = req.body;
-
-      console.log("PARAM:", req.params);
-      console.log("PERKARA_ID:", perkara_id);
 
       if (!jaksa_list || jaksa_list.length === 0) {
         throw {
@@ -195,7 +270,6 @@ class P16Controller {
         };
       }
 
-      // 🔥 SAFETY CHECK
       if (!perkara_id) {
         throw {
           name: "Bad Request",
@@ -230,7 +304,6 @@ class P16Controller {
       });
     } catch (err) {
       await t.rollback();
-      console.log("ERROR UPDATE P16:", err); // 🔥 DEBUG
       next(err);
     }
   }

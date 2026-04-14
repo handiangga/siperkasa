@@ -1,4 +1,4 @@
-const { Spdp, Perkara } = require("../models");
+const { Spdp, Perkara, P16Assignment, Jaksa } = require("../models");
 
 class SpdpController {
   static async create(req, res, next) {
@@ -8,7 +8,6 @@ class SpdpController {
       const { nomor_spdp, tanggal_spdp, asal_instansi, nama_tersangka, pasal } =
         req.body;
 
-      // 🔥 1. create SPDP
       const spdp = await Spdp.create(
         {
           nomor_spdp,
@@ -21,7 +20,6 @@ class SpdpController {
         { transaction: t },
       );
 
-      // 🔥 2. create Perkara
       const perkara = await Perkara.create(
         {
           spdp_id: spdp.id,
@@ -46,43 +44,98 @@ class SpdpController {
 
   static async getAll(req, res, next) {
     try {
-      const data = await Spdp.findAll();
+      const { role, jaksa_id } = req.user;
+
+      let data;
+
+      if (role === "jaksa") {
+        data = await Spdp.findAll({
+          include: [
+            {
+              model: Perkara,
+              as: "Perkara",
+              required: true,
+              include: [
+                {
+                  model: P16Assignment,
+                  as: "P16Assignments",
+                  where: { jaksa_id },
+                  required: true,
+                },
+              ],
+            },
+          ],
+          order: [["id", "DESC"]],
+        });
+      } else {
+        data = await Spdp.findAll({
+          order: [["id", "DESC"]],
+        });
+      }
+
       res.json(data);
     } catch (err) {
       next(err);
     }
   }
 
-  // 🔍 DETAIL SPDP
   static async getById(req, res, next) {
     try {
       const { id } = req.params;
+      const { role, jaksa_id } = req.user;
 
-      const { Spdp, Perkara, P16Assignment, Jaksa } = require("../models");
+      let data;
 
-      const data = await Spdp.findByPk(id, {
-        include: [
-          {
-            model: Perkara,
-            as: "Perkara", // ✅ WAJIB (sesuai model kamu)
-            include: [
-              {
-                model: P16Assignment,
-                as: "P16Assignments", // ⚠️ cek ini di model perkara kamu
-                include: [
-                  {
-                    model: Jaksa,
-                    as: "Jaksa", // ⚠️ cek ini di model P16Assignment
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      });
+      if (role === "jaksa") {
+        data = await Spdp.findOne({
+          where: { id },
+          include: [
+            {
+              model: Perkara,
+              as: "Perkara",
+              required: true,
+              include: [
+                {
+                  model: P16Assignment,
+                  as: "P16Assignments",
+                  where: { jaksa_id },
+                  required: true,
+                  include: [
+                    {
+                      model: Jaksa,
+                      as: "Jaksa",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        });
+      } else {
+        data = await Spdp.findByPk(id, {
+          include: [
+            {
+              model: Perkara,
+              as: "Perkara",
+              include: [
+                {
+                  model: P16Assignment,
+                  as: "P16Assignments",
+                  include: [
+                    {
+                      model: Jaksa,
+                      as: "Jaksa",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        });
+      }
 
       if (!data) {
-        throw { name: "Not Found", message: "SPDP tidak ditemukan" };
+        return res.status(404).json({ message: "SPDP tidak ditemukan" });
       }
 
       res.status(200).json(data);
@@ -91,7 +144,6 @@ class SpdpController {
     }
   }
 
-  // ✏️ UPDATE SPDP
   static async update(req, res, next) {
     try {
       const { id } = req.params;

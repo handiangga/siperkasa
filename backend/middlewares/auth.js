@@ -15,9 +15,17 @@ async function authentication(req, res, next) {
       };
     }
 
-    // 🔥 support Bearer token
+    // 🔥 handle Bearer
     if (token.startsWith("Bearer ")) {
       token = token.split(" ")[1];
+    }
+
+    // 🔥 guard token aneh
+    if (!token || token === "undefined" || token === "null") {
+      throw {
+        name: "Unauthorized",
+        message: "Invalid token",
+      };
     }
 
     const payload = jwtVerify(token);
@@ -31,12 +39,15 @@ async function authentication(req, res, next) {
       };
     }
 
+    // 🔥 FIX FINAL (normalize role)
+    const role = user.role?.toLowerCase().trim();
+
     req.user = {
       id: user.id,
-      role: user.role,
+      role,
       email: user.email,
       name: user.name,
-      jaksa_id: user.jaksa_id,
+      jaksa_id: user.jaksa_id || null,
     };
 
     next();
@@ -50,12 +61,15 @@ async function authentication(req, res, next) {
 // =========================
 function authorization(...allowedRoles) {
   return (req, res, next) => {
-    if (!allowedRoles.includes(req.user.role)) {
+    const role = req.user.role;
+
+    if (!allowedRoles.includes(role)) {
       return next({
         name: "Forbidden",
         message: "Tidak punya akses",
       });
     }
+
     next();
   };
 }
@@ -65,14 +79,21 @@ function authorization(...allowedRoles) {
 // =========================
 async function authorizationPerkara(req, res, next) {
   try {
-    const { perkara_id } = req.params;
+    const perkara_id = req.params.perkara_id || req.params.id;
 
-    // 🔥 admin, kajari, operator bebas
+    // 🔥 bypass role tinggi
     if (["admin", "kajari", "operator"].includes(req.user.role)) {
       return next();
     }
 
-    // 🔥 jaksa hanya punya dia
+    // 🔥 wajib punya jaksa_id
+    if (!req.user.jaksa_id) {
+      throw {
+        name: "Forbidden",
+        message: "Tidak punya akses",
+      };
+    }
+
     const data = await P16Assignment.findOne({
       where: {
         perkara_id,
