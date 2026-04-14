@@ -87,7 +87,6 @@ class DashboardController {
   // =========================
   static async jaksaStats(req, res, next) {
     try {
-      // 🔥 ambil user
       const user = await User.findByPk(req.user.id);
 
       if (!user || !user.jaksa_id) {
@@ -113,17 +112,17 @@ class DashboardController {
         ],
       });
 
-      // 🔥 inject peran ke perkara
+      // 🔥 FIX: pastikan peran masuk
       const perkara = p16
+        .filter((p) => p.Perkara)
         .map((p) => {
-          if (!p.Perkara) return null;
+          const perkaraData = p.Perkara.toJSON();
 
           return {
-            ...p.Perkara.toJSON(),
-            peran: p.peran, // 🔥 INI YANG DIPAKAI DI FE
+            ...perkaraData,
+            peran: p.peran, // 🔥 INI WAJIB
           };
-        })
-        .filter(Boolean);
+        });
 
       const total = perkara.length;
 

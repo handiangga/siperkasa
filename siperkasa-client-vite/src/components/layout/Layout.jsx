@@ -25,9 +25,14 @@ export default function Layout() {
     { name: "Dashboard", path: "/dashboard" },
     { name: "SPDP", path: "/spdp" },
     { name: "P16", path: "/p16" },
-    { name: "Jaksa", path: "/jaksa" },
   ];
 
+  // 🔥 hanya tampilkan Jaksa kalau bukan role jaksa
+  if (user?.role !== "jaksa") {
+    menus.push({ name: "Jaksa", path: "/jaksa" });
+  }
+
+  // 🔥 hanya admin
   if (user?.role === "admin") {
     menus.push({ name: "User", path: "/users" });
   }
