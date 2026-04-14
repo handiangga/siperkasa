@@ -9,12 +9,12 @@ const {
 } = require("../middlewares/auth");
 
 // =========================
-// 🔥 GET ALL (ADMIN, KAJARI, OPERATOR)
+// 🔥 GET ALL (SEMUA ROLE)
 // =========================
 router.get(
   "/",
   authentication,
-  authorization("admin", "kajari", "operator"),
+  authorization("admin", "kajari", "operator", "jaksa"), // 🔥 FIX
   PerkaraController.getAll,
 );
 
@@ -34,7 +34,7 @@ router.get(
 router.get(
   "/:perkara_id",
   authentication,
-  authorizationPerkara,
+  authorizationPerkara, // 🔥 ini sudah benar
   PerkaraController.getDetail,
 );
 

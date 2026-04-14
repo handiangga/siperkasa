@@ -3,7 +3,6 @@ const router = express.Router();
 
 const SpdpController = require("../controllers/spdpController");
 const { authentication, authorization } = require("../middlewares/auth");
-
 const { validateSpdp } = require("../middlewares/validation");
 
 // =========================
@@ -18,22 +17,22 @@ router.post(
 );
 
 // =========================
-// 🔥 GET ALL (ADMIN, KAJARI, OPERATOR)
+// 🔥 GET ALL (SEMUA ROLE)
 // =========================
 router.get(
   "/",
   authentication,
-  authorization("admin", "kajari", "operator"),
+  authorization("admin", "kajari", "operator", "jaksa"), // 🔥 FIX
   SpdpController.getAll,
 );
 
 // =========================
-// 🔥 GET BY ID
+// 🔥 GET BY ID (SEMUA ROLE)
 // =========================
 router.get(
   "/:id",
   authentication,
-  authorization("admin", "kajari", "operator"),
+  authorization("admin", "kajari", "operator", "jaksa"), // 🔥 FIX
   SpdpController.getById,
 );
 

@@ -2,7 +2,11 @@ const express = require("express");
 const router = express.Router();
 
 const P16Controller = require("../controllers/p16Controller");
-const { authentication, authorization } = require("../middlewares/auth");
+const {
+  authentication,
+  authorization,
+  authorizationPerkara,
+} = require("../middlewares/auth");
 
 // =========================
 // 🔥 CREATE (ADMIN + OPERATOR)
@@ -15,12 +19,12 @@ router.post(
 );
 
 // =========================
-// 🔥 GET ALL (ADMIN + KAJARI)
+// 🔥 GET ALL (SEMUA ROLE)
 // =========================
 router.get(
   "/",
   authentication,
-  authorization("admin", "kajari"),
+  authorization("admin", "kajari", "operator", "jaksa"), // 🔥 FIX
   P16Controller.getAll,
 );
 
@@ -35,22 +39,22 @@ router.get(
 );
 
 // =========================
-// 🔥 GET BY PERKARA
+// 🔥 GET BY PERKARA (ROLE BASED)
 // =========================
 router.get(
   "/perkara/:id",
   authentication,
-  authorization("admin", "kajari", "operator"),
+  authorizationPerkara, // 🔥 FIX (biar jaksa cuma lihat punya dia)
   P16Controller.getByPerkara,
 );
 
 // =========================
-// 🔥 DETAIL
+// 🔥 DETAIL (ROLE BASED)
 // =========================
 router.get(
   "/:id",
   authentication,
-  authorization("admin", "kajari", "operator"),
+  authorization("admin", "kajari", "operator", "jaksa"), // 🔥 FIX
   P16Controller.getById,
 );
 
